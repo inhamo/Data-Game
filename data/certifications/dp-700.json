@@ -1,0 +1,512 @@
+{
+  "certification": "DP-700",
+  "title": "Implementing Data Engineering Solutions Using Microsoft Fabric",
+  "source": "User-provided DP-700 practice PDF",
+  "sessionSize": 36,
+  "questions": [
+    {
+      "id": "dp700-001",
+      "sourceQuestion": 1,
+      "domain": "Implement and manage an analytics solution",
+      "question": "Lakehouses, data pipelines, and notebooks must be stored in WorkspaceA. Semantic models, reports, and dataflows must be stored in WorkspaceB. Once a week, old files that are no longer referenced by a Delta table log must be removed. Requirements. Data Transformation In the POS1 product data, ProductID values are unique. The product dimension in the gold layer must include only active products from product list. Active products are identified by an IsActive value of 1. Some product categories and subcategories are NOT assigned to any product. They are NOT analytically relevant and must be omitted from the product dimension in the gold layer. Requirements. Data Security - Security in Fabric must meet the following requirements: The data engineers must have read and write access to all the lakehouses, including the underlying files. The data analysts must only have read access to the Delta tables in the gold layer. The data analysts must NOT have access to the data in the bronze and silver layers. The data engineers must be able to commit changes to source control in WorkspaceA. You need to ensure that the data analysts can access the gold layer lakehouse. What should you do?",
+      "options": [
+        "Add the DataAnalyst group to the Viewer role for WorkspaceA.",
+        "Share the lakehouse with the DataAnalysts group and grant the Build reports on the default semantic model permission.",
+        "Share the lakehouse with the DataAnalysts group and grant the Read all SQL Endpoint data permission.",
+        "Share the lakehouse with the DataAnalysts group and grant the Read all Apache Spark permission."
+      ],
+      "correct": 2,
+      "explanation": "The supplied practice bank identifies C — Share the lakehouse with the DataAnalysts group and grant the Read all SQL Endpoint data permission. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-002",
+      "sourceQuestion": 2,
+      "domain": "Implement and manage an analytics solution",
+      "question": "You have a Fabric workspace that contains a warehouse named Warehouse1. You have an on-premises Microsoft SQL Server database named Database1 that is accessed by using an on- premises data gateway. You need to copy data from Database1 to Warehouse1. Which item should you use?",
+      "options": [
+        "a Dataflow Gen1 dataflow",
+        "a data pipeline",
+        "a KQL queryset",
+        "a notebook"
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — a data pipeline — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-004",
+      "sourceQuestion": 4,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "You have a Fabric F32 capacity that contains a workspace. The workspace contains a warehouse named DW1 that is modelled by using MD5 hash surrogate keys. DW1 contains a single fact table that has grown from 200 million rows to 500 million rows during the past year. You have Microsoft Power BI reports that are based on Direct Lake. The reports show year-over-year values. Users report that the performance of some of the reports has degraded over time and some visuals show errors. You need to resolve the performance issues. The solution must meet the following requirements: Provide the best query performance. Minimize operational costs. Which should you do?",
+      "options": [
+        "Change the MD5 hash to SHA256.",
+        "Increase the capacity.",
+        "Enable V-Order.",
+        "Modify the surrogate keys to use a different data type."
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — Increase the capacity. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-007",
+      "sourceQuestion": 7,
+      "domain": "Ingest and transform data",
+      "question": "You have a Fabric workspace named Workspace1 that contains a notebook named Notebook1. In Workspace1, you create a new notebook named Notebook2. You need to ensure that you can attach Notebook2 to the same Apache Spark session as Notebook1. What should you do?",
+      "options": [
+        "Enable high concurrency for notebooks.",
+        "Enable dynamic allocation for the Spark pool.",
+        "Change the runtime version.",
+        "Increase the number of executors."
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — Enable high concurrency for notebooks. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-009",
+      "sourceQuestion": 9,
+      "domain": "Implement and manage an analytics solution",
+      "question": "You have a Fabric warehouse named DW1. DW1 contains a table that stores sales data and is used by multiple sales representatives. You plan to implement row-level security (RLS). You need to ensure that the sales representatives can see only their respective data. Which warehouse object do you require to implement RLS?",
+      "options": [
+        "STORED PROCEDURE",
+        "CONSTRAINT",
+        "SCHEMA",
+        "FUNCTION"
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — FUNCTION — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-011",
+      "sourceQuestion": 11,
+      "domain": "Implement and manage an analytics solution",
+      "question": "You have a Fabric deployment pipeline that uses three workspaces named Dev, Test, and Prod. You need to deploy an eventhouse as part of the deployment process. What should you use to add the eventhouse to the deployment process?",
+      "options": [
+        "GitHub Actions",
+        "a deployment pipeline",
+        "an Azure DevOps pipeline Answer: C Explanation: An Azure DevOps pipeline. Allows you to script deployments using REST APIs or PowerShell scripts. Supports complex logic, conditions, and approval flows. Integrates well with Azure Repos, Microsoft Entra ID (Azure AD), and Microsoft Fabric Git integration. Ideal for enterprise CI/CD pipelines where deployment of unsupported items (like Eventhouse) is needed. You have a Fabric workspace named Workspace1 that contains a warehouse named Warehouse1. You plan to deploy Warehouse1 to a new workspace named Workspace2. As part of the deployment process, you need to verify whether Warehouse1 contains invalid references. The solution must minimize development effort. What should you use A. a database project B. a deployment pipeline C. a Python script",
+        "a T-SQL script"
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — a deployment pipeline — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-013",
+      "sourceQuestion": 13,
+      "domain": "Ingest and transform data",
+      "question": "You have a Fabric workspace that contains a Real-Time Intelligence solution and an eventhouse. Users report that from OneLake file explorer, they cannot see the data from the eventhouse. You enable OneLake availability for the eventhouse. What will be copied to OneLake?",
+      "options": [
+        "only data added to new databases that are added to the eventhouse",
+        "only the existing data in the eventhouse",
+        "no data",
+        "both new data and existing data in the eventhouse"
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — only data added to new databases that are added to the eventhouse — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-017",
+      "sourceQuestion": 17,
+      "domain": "Ingest and transform data",
+      "question": "You have the Delta Parquet files shown in the following table. You have a Fabric workspace named Workspace1 that has the cache for shortcuts enabled. Workspace1 contains a lakehouse named Lakehouse1. Lakehouse1 has the following shortcuts: A shortcut to ProductFile aliased as Products A shortcut to StoreFile aliased as Stores A shortcut to TripsFile aliased as Trips The data from which shortcuts will be retrieved from the cache?",
+      "options": [
+        "Trips and Stores only",
+        "Products and Store only",
+        "Stores only",
+        "Products only"
+      ],
+      "correct": 2,
+      "explanation": "The supplied practice bank identifies C — Stores only — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-019",
+      "sourceQuestion": 19,
+      "domain": "Implement and manage an analytics solution",
+      "question": "Certy IQ Your company has a sales department that uses two Fabric workspaces named Workspace1 and Workspace2. The company decides to implement a domain strategy to organize the workspaces. You need to ensure that a user can perform the following tasks: Create a new domain for the sales department. Create two subdomains: one for the east region and one for the west region. Assign Workspace1 to the east region subdomain. Assign Workspace2 to the west region subdomain. The solution must follow the principle of least privilege. Which role should you assign to the user?",
+      "options": [
+        "workspace Admin",
+        "domain admin",
+        "domain contributor",
+        "Fabric admin"
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Fabric admin — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-021",
+      "sourceQuestion": 21,
+      "domain": "Implement and manage an analytics solution",
+      "question": "You have a Fabric capacity that contains a workspace named Workspace1. Workspace1 contains a lakehouse named Lakehouse1, a data pipeline, a notebook, and several Microsoft Power BI reports. A user named User1 wants to use SQL to analyze the data in Lakehouse1. You need to configure access for User1. The solution must meet the following requirements: Provide User1 with read access to the table data in Lakehouse1. Prevent User1 from using Apache Spark to query the underlying files in Lakehouse1. Prevent User1 from accessing other items in Workspace1. What should you do?",
+      "options": [
+        "Share Lakehouse1 with User1 directly and select Read all SQL endpoint data.",
+        "Assign User1 the Viewer role for Workspace1. Share Lakehouse1 with User1 and select Read all SQL endpoint data.",
+        "Share Lakehouse1 with User1 directly and select Build reports on the default semantic model.",
+        "Assign User1 the Member role for Workspace1. Share Lakehouse1 with User1 and select Read all SQL endpoint data."
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — Share Lakehouse1 with User1 directly and select Read all SQL endpoint data. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-025",
+      "sourceQuestion": 25,
+      "domain": "Ingest and transform data",
+      "question": "Certy IQ Items in Workspace1 that have the same name as items in Workspace2 are currently paired. You need to ensure that the items in Workspace1 overwrite the corresponding items in Workspace2. The solution must minimize effort. What should you do?",
+      "options": [
+        "Delete all the items in Workspace2, and then run deployPipeline1.",
+        "Rename each item in Workspace2 to have the same name as the items in Workspace1.",
+        "Back up the items in Workspace2, and then run deployPipeline1.",
+        "Run deployPipeline1 without modifying the items in Workspace2."
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Run deployPipeline1 without modifying the items in Workspace2. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-027",
+      "sourceQuestion": 27,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "You have a Fabric workspace that contains a lakehouse and a notebook named Notebook1. Notebook1 reads data into a DataFrame from a table named Table1 and applies transformation logic. The data from the DataFrame is then written to a new Delta table named Table2 by using a merge operation. You need to consolidate the underlying Parquet files in Table1. Which command should you run?",
+      "options": [
+        "VACUUM",
+        "BROADCAST",
+        "OPTIMIZE",
+        "CACHE"
+      ],
+      "correct": 2,
+      "explanation": "The supplied practice bank identifies C — OPTIMIZE — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-028",
+      "sourceQuestion": 28,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "You have five Fabric workspaces. You are monitoring the execution of items by using Monitoring hub. You need to identify in which workspace a specific item runs. Which column should you view in Monitoring hub?",
+      "options": [
+        "Start time",
+        "Capacity",
+        "Activity name",
+        "Submitter"
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Submitter — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-031",
+      "sourceQuestion": 31,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "You have a Fabric workspace that contains a semantic model named Model1. You need to dynamically execute and monitor the refresh progress of Model1. What should you use?",
+      "options": [
+        "dynamic management views in Microsoft SQL Server Management Studio (SSMS)",
+        "Monitoring hub",
+        "dynamic management views in Azure Data Studio",
+        "a semantic link in a notebook"
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — a semantic link in a notebook — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-037",
+      "sourceQuestion": 37,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "Requirements. Planned Changes - Litware recently signed a contract to receive book reviews. The provider of the reviews exposes the data in Amazon Simple Storage Service (Amazon S3) buckets. Litware plans to manage Search Engine Optimization (SEO) for the authors. The SEO data will be streamed from a REST API. Requirements. Version Control - Litware plans to implement a version control solution in Fabric that will use GitHub integration and follow the principle of least privilege. Requirements. Governance Requirements To control data platform costs, the data platform must use only Fabric services and items. Additional Azure resources must NOT be provisioned. Requirements. Data Requirements - Litware identifies the following data requirements: •Process the SEO data in near-real-time (NRT). •Make the book reviews available in the lakehouse without making a copy of the data. •When a new book cover image arrives in the Files folder, process the image as soon as possible. You need to ensure that processes for the bronze and silver layers run in isolation. How should you configure the Apache Spark settings?",
+      "options": [
+        "Disable high concurrency.",
+        "Create a custom pool.",
+        "Modify the number of executors.",
+        "Set the default environment."
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — Create a custom pool. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-048",
+      "sourceQuestion": 48,
+      "domain": "Implement and manage an analytics solution",
+      "question": "You have a Fabric workspace named Workspace1. You plan to configure Git integration for Workspace1 by using an Azure DevOps Git repository. An Azure DevOps admin creates the required artifacts to support the integration of Workspace1. Which details do you require to perform the integration?",
+      "options": [
+        "the organization, project, Git repository, and branch",
+        "the personal access token (PAT) for Git authentication and the Git repository URL",
+        "the project, Git repository, branch, and Git folder",
+        "the Git repository URL and the Git folder"
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — the organization, project, Git repository, and branch — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-049",
+      "sourceQuestion": 49,
+      "domain": "Ingest and transform data",
+      "question": "You have a Fabric workspace that contains a lakehouse named Lakehouse1. You plan to create a data pipeline named Pipeline1 to ingest data into Lakehouse1. You will use a parameter named param1 to pass an external value into Pipeline1. The param1 parameter has a data type of int. You need to ensure that the pipeline expression returns param1 as an int value. How should you specify the parameter value?",
+      "options": [
+        "\"@pipeline().parameters.param1\"",
+        "\"@ pipeline().parameters.param1 \"",
+        "\"@ pipeline().parameters.[param1] \"",
+        "\"@@ pipeline().parameters.param1 \""
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — \"@pipeline().parameters.param1\" — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-052",
+      "sourceQuestion": 52,
+      "domain": "Ingest and transform data",
+      "question": "Certy IQ You need to ensure that the notebooks are executed in the following sequence: 1. Notebook_03 2. Notebook_01 3. Notebook_02 Which two actions should you perform Each correct answer presents part of the solution. NOTE: Each correct selection is worth one point?",
+      "options": [
+        "Move the declaration of Notebook_02 to the bottom of the Directed Acyclic Graph (DAG) definition.",
+        "Add dependencies to the execution of Notebook_03.",
+        "Split the Directed Acyclic Graph (DAG) definition into three separate definitions.",
+        "Add dependencies to the execution of Notebook_02."
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Add dependencies to the execution of Notebook_02. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-058",
+      "sourceQuestion": 58,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "You have a Fabric F32 capacity that contains a workspace. The workspace contains a warehouse named DW1 that is modelled by using MD5 hash surrogate keys. DW1 contains a single fact table that has grown from 200 million rows to 500 million rows during the past year. You have Microsoft Power BI reports that are based on Direct Lake. The reports show year-over-year values. Users report that the performance of some of the reports has degraded over time and some visuals show errors. You need to resolve the performance issues. The solution must meet the following requirements: •Provide the best query performance. •Minimize operational costs. Which should you do?",
+      "options": [
+        "Create views.",
+        "Modify the surrogate keys to use a different data type.",
+        "Change the MD5 hash to SHA256.",
+        "Increase the capacity."
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — Modify the surrogate keys to use a different data type. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-061",
+      "sourceQuestion": 61,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "The company’s sales team reports that during the last month, the sales data has NOT been up-to-date when they arrive at work in the morning. Requirements. Planned Changes - Litware recently signed a contract to receive book reviews. The provider of the reviews exposes the data in Amazon Simple Storage Service (Amazon S3) buckets. Litware plans to manage Search Engine Optimization (SEO) for the authors. The SEO data will be streamed from a REST API. Requirements. Version Control - Litware plans to implement a version control solution in Fabric that will use GitHub integration and follow the principle of least privilege. Requirements. Governance Requirements To control data platform costs, the data platform must use only Fabric services and items. Additional Azure resources must NOT be provisioned. Requirements. Data Requirements - Litware identifies the following data requirements: Process the SEO data in near-real-time (NRT). Make the book reviews available in the lakehouse without making a copy of the data. When a new book cover image arrives in the Files folder, process the image as soon as possible. You need to implement the solution for the book reviews. Which should you do?",
+      "options": [
+        "Create a Dataflow Gen2 dataflow.",
+        "Create a shortcut.",
+        "Enable external data sharing.",
+        "Create a data pipeline."
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — Create a shortcut. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-064",
+      "sourceQuestion": 64,
+      "domain": "Implement and manage an analytics solution",
+      "question": "data pipelines, and notebooks must be stored in WorkspaceA. Semantic models, reports, and dataflows must be stored in WorkspaceB. Once a week, old files that are no longer referenced by a Delta table log must be removed. Requirements. Data Transformation In the POS1 product data, ProductID values are unique. The product dimension in the gold layer must include only active products from product list. Active products are identified by an IsActive value of 1. Some product categories and subcategories are NOT assigned to any product. They are NOT analytically relevant and must be omitted from the product dimension in the gold layer. Requirements. Data Security - Security in Fabric must meet the following requirements: The data engineers must have read and write access to all the lakehouses, including the underlying files. The data analysts must only have read access to the Delta tables in the gold layer. The data analysts must NOT have access to the data in the bronze and silver layers. The data engineers must be able to commit changes to source control in WorkspaceA. You need to ensure that usage of the data in the Amazon S3 bucket meets the technical requirements. What should you do?",
+      "options": [
+        "Create a workspace identity and enable high concurrency for the notebooks.",
+        "Create a shortcut and ensure that caching is disabled for the workspace.",
+        "Create a workspace identity and use the identity in a data pipeline.",
+        "Create a shortcut and ensure that caching is enabled for the workspace."
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Create a shortcut and ensure that caching is enabled for the workspace. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-068",
+      "sourceQuestion": 68,
+      "domain": "Ingest and transform data",
+      "question": "You have a Fabric workspace that contains an eventstream named Eventstream1. Eventstream1 processes data from a thermal sensor by using event stream processing, and then stores the data in a lakehouse. You need to modify Eventstream1 to include the standard deviation of the temperature. Which transform operator should you include in the Eventstream1 logic?",
+      "options": [
+        "Expand",
+        "Group by",
+        "Union",
+        "Aggregate"
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — Group by — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-072",
+      "sourceQuestion": 72,
+      "domain": "Ingest and transform data",
+      "question": "You have a Fabric workspace that contains a lakehouse named Lakehouse1. In an external data source, you have data files that are 500 GB each. A new file is added every day. You need to ingest the data into Lakehouse1 without applying any transformations. The solution must meet the following requirements Trigger the process when a new file is added. Provide the highest throughput. Which type of item should you use to ingest the data?",
+      "options": [
+        "Eventstream",
+        "Dataflow Gen2",
+        "Streaming dataset",
+        "Data pipeline"
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Data pipeline — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-073",
+      "sourceQuestion": 73,
+      "domain": "Ingest and transform data",
+      "question": "You have a Fabric workspace that contains a lakehouse named Lakehouse1. In an external data source, you have data files that are 500 GB each. A new file is added every day. You need to ingest the data into Lakehouse1 without applying any transformations. The solution must meet the following requirements Trigger the process when a new file is added. Provide the highest throughput. Which type of item should you use to ingest the data?",
+      "options": [
+        "Data pipeline",
+        "Environment",
+        "KQL queryset",
+        "Dataflow Gen2"
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — Data pipeline — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-083",
+      "sourceQuestion": 83,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "Requirements. Planned Changes - Litware recently signed a contract to receive book reviews. The provider of the reviews exposes the data in Amazon Simple Storage Service (Amazon S3) buckets. Litware plans to manage Search Engine Optimization (SEO) for the authors. The SEO data will be streamed from a REST API. Requirements. Version Control - Litware plans to implement a version control solution in Fabric that will use GitHub integration and follow the principle of least privilege. Requirements. Governance Requirements To control data platform costs, the data platform must use only Fabric services and items. Additional Azure resources must NOT be provisioned. Requirements. Data Requirements - Litware identifies the following data requirements: •Process the SEO data in near-real-time (NRT). •Make the book reviews available in the lakehouse without making a copy of the data. •When a new book cover image arrives in the Files folder, process the image as soon as possible. What should you recommend that the data engineering team use to ingest the SEO data?",
+      "options": [
+        "a streaming dataflow",
+        "a streaming dataset",
+        "a notebook that uses Apache Spark Structured Streaming",
+        "an eventstream"
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — an eventstream — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-088",
+      "sourceQuestion": 88,
+      "domain": "Ingest and transform data",
+      "question": "Add a Copy data activity as an inner activity to the iterator activity. Inside the ForEach loop, the Copy Data activity will copy the actual data from the source system into the Delta table in the lakehouse. Each table in the list will be copied one by one as the loop runs. This is the main operation that moves the data. Each iteration uses parameters (table name, schema, etc.) from the current item being looped over. You are implementing a medallion architecture in a Fabric lakehouse. You plan to create a dimension table that will contain the following columns: •ID •CustomerCode •CustomerName •CustomerAddress •CustomerLocation •ValidFrom •ValidTo You need to ensure that the table supports the analysis of historical sales data by customer location at the time of each sale. Which type of slowly changing dimension (SCD) should you use?",
+      "options": [
+        "Type 2",
+        "Type 0",
+        "Type 1",
+        "Type 3"
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — Type 2 — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-092",
+      "sourceQuestion": 92,
+      "domain": "Implement and manage an analytics solution",
+      "question": "You have a Fabric workspace that contains a warehouse named Warehouse1. You have an on-premises Microsoft SQL Server database named Database1 that is accessed by using an on- premises data gateway. You need to copy data from Database1 to Warehouse1. Which item should you use?",
+      "options": [
+        "a data pipeline",
+        "an Apache Spark job definition",
+        "a streaming dataflow",
+        "a notebook"
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — a data pipeline — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-094",
+      "sourceQuestion": 94,
+      "domain": "Ingest and transform data",
+      "question": "Certy IQ named DimCustomer. DimCustomer contains 100 columns and 20 million rows. The columns are of various data types, including int, varchar, date, and varbinary. You need to identify incoming changes to the table and update the records when there is a change. The solution must minimize resource consumption. What should you use to identify changes to attributes?",
+      "options": [
+        "a hash function to compare the attributes in the source table.",
+        "a direct attributes comparison across the attributes in the DimCustomer table.",
+        "a direct attributes comparison for the attributes in the source table.",
+        "a hash function to compare the attributes in the DimCustomer table."
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — a hash function to compare the attributes in the source table. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-096",
+      "sourceQuestion": 96,
+      "domain": "Implement and manage an analytics solution",
+      "question": "Semantic models, reports, and dataflows must be stored in WorkspaceB. Once a week, old files that are no longer referenced by a Delta table log must be removed. Requirements. Data Transformation In the POS1 product data, ProductID values are unique. The product dimension in the gold layer must include only active products from product list. Active products are identified by an IsActive value of 1. Some product categories and subcategories are NOT assigned to any product. They are NOT analytically relevant and must be omitted from the product dimension in the gold layer. Requirements. Data Security - Security in Fabric must meet the following requirements: •The data engineers must have read and write access to all the lakehouses, including the underlying files. •The data analysts must only have read access to the Delta tables in the gold layer. •The data analysts must NOT have access to the data in the bronze and silver layers. •The data engineers must be able to commit changes to source control in WorkspaceA. You need to recommend a solution to resolve the MAR1 connectivity issues. The solution must minimize development effort. What should you recommend?",
+      "options": [
+        "Add a ForEach activity to the data pipeline.",
+        "Configure retries for the Copy data activity.",
+        "Call a notebook from the data pipeline.",
+        "Configure Fault tolerance for the Copy data activity."
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — Configure retries for the Copy data activity. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-097",
+      "sourceQuestion": 97,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "Semantic models, reports, and dataflows must be stored in WorkspaceB. Once a week, old files that are no longer referenced by a Delta table log must be removed. Requirements. Data Transformation In the POS1 product data, ProductID values are unique. The product dimension in the gold layer must include only active products from product list. Active products are identified by an IsActive value of 1. Some product categories and subcategories are NOT assigned to any product. They are NOT analytically relevant and must be omitted from the product dimension in the gold layer. Requirements. Data Security - Security in Fabric must meet the following requirements: •The data engineers must have read and write access to all the lakehouses, including the underlying files. •The data analysts must only have read access to the Delta tables in the gold layer. •The data analysts must NOT have access to the data in the bronze and silver layers. •The data engineers must be able to commit changes to source control in WorkspaceA. You need to recommend a solution for handling old files. The solution must meet the technical requirements. What should you include in the recommendation?",
+      "options": [
+        "a data pipeline that includes a Copy data activity",
+        "a data pipeline that includes a Delete data activity",
+        "a notebook that runs the VACUUM command",
+        "a notebook that runs the OPTIMIZE command"
+      ],
+      "correct": 2,
+      "explanation": "The supplied practice bank identifies C — a notebook that runs the VACUUM command — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-100",
+      "sourceQuestion": 100,
+      "domain": "Implement and manage an analytics solution",
+      "question": "You have an Azure event hub. Each event contains the following fields: •BikepointID •Street •Neighbourhood •Latitude •Longitude •No_Bikes •No_Empty_Docks You need to ingest the events. The solution must only retain events that have a Neighbourhood value of Chelsea, and then store the retained events in a Fabric lakehouse. Data retention in case of failure is required to be two days. What should you use?",
+      "options": [
+        "an eventstream",
+        "Apache Spark Structured Streaming",
+        "a streaming dataset",
+        "a KQL queryset"
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — an eventstream — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-104",
+      "sourceQuestion": 104,
+      "domain": "Implement and manage an analytics solution",
+      "question": "Semantic models, reports, and dataflows must be stored in WorkspaceB. Once a week, old files that are no longer referenced by a Delta table log must be removed. Requirements. Data Transformation In the POS1 product data, ProductID values are unique. The product dimension in the gold layer must include only active products from product list. Active products are identified by an IsActive value of 1. Some product categories and subcategories are NOT assigned to any product. They are NOT analytically relevant and must be omitted from the product dimension in the gold layer. Requirements. Data Security - Security in Fabric must meet the following requirements: The data engineers must have read and write access to all the lakehouses, including the underlying files. The data analysts must only have read access to the Delta tables in the gold layer. The data analysts must NOT have access to the data in the bronze and silver layers. The data engineers must be able to commit changes to source control in WorkspaceA. You need to schedule the population of the medallion layers to meet the technical requirements. What should you do?",
+      "options": [
+        "Schedule a data pipeline that calls other data pipelines.",
+        "Schedule a notebook.",
+        "Schedule an Apache Spark job.",
+        "Schedule multiple data pipelines."
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — Schedule a data pipeline that calls other data pipelines. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-107",
+      "sourceQuestion": 107,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "You have a Fabric workspace that contains a warehouse named Warehouse1. Data is loaded daily into Warehouse1 by using data pipelines and stored procedures. You discover that the daily data load takes longer than expected. You need to monitor Warehouse1 to identify the names of users that are actively running queries. Which view should you use?",
+      "options": [
+        "sys.dm_exec_connections",
+        "sys.dm_exec_requests",
+        "queryinsights.long_running_queries",
+        "queryinsights.frequently_run_queries"
+      ],
+      "correct": 0,
+      "explanation": "The supplied practice bank identifies A — sys.dm_exec_connections — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-113",
+      "sourceQuestion": 113,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "The company’s sales team reports that during the last month, the sales data has NOT been up-to-date when they arrive at work in the morning. Requirements. Planned Changes - Litware recently signed a contract to receive book reviews. The provider of the reviews exposes the data in Amazon Simple Storage Service (Amazon S3) buckets. Litware plans to manage Search Engine Optimization (SEO) for the authors. The SEO data will be streamed from a REST API. Requirements. Version Control - Litware plans to implement a version control solution in Fabric that will use GitHub integration and follow the principle of least privilege. Requirements. Governance Requirements To control data platform costs, the data platform must use only Fabric services and items. Additional Azure resources must NOT be provisioned. Requirements. Data Requirements - Litware identifies the following data requirements: •Process the SEO data in near-real-time (NRT). •Make the book reviews available in the lakehouse without making a copy of the data. •When a new book cover image arrives in the Files folder, process the image as soon as possible. What should you do to optimize the query experience for the business users?",
+      "options": [
+        "Enable V-Order.",
+        "Create and update statistics.",
+        "Run the VACUUM command.",
+        "Introduce primary keys."
+      ],
+      "correct": 1,
+      "explanation": "The supplied practice bank identifies B — Create and update statistics. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-115",
+      "sourceQuestion": 115,
+      "domain": "Monitor and optimize an analytics solution",
+      "question": "You have a Fabric workspace that contains a write-intensive warehouse named DW1. DW1 stores staging tables that are used to load a dimensional model. The tables are often read once, dropped, and then recreated to process new data. You need to minimize the load time of DW1. What should you do?",
+      "options": [
+        "Enable V-Order.",
+        "Create statistics.",
+        "Drop statistics.",
+        "Disable V-Order."
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Disable V-Order. — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    },
+    {
+      "id": "dp700-117",
+      "sourceQuestion": 117,
+      "domain": "Ingest and transform data",
+      "question": "You have a Fabric workspace that contains a lakehouse named Lakehouse1. In an external data source, you have data files that are 500 GB each. A new file is added every day. You need to ingest the data into Lakehouse1 without applying any transformations. The solution must meet the following requirements: •Trigger the process when a new file is added. •Provide the highest throughput. Which type of item should you use to ingest the data?",
+      "options": [
+        "KQL queryset",
+        "Streaming dataset",
+        "Notebook",
+        "Dataflow Gen2"
+      ],
+      "correct": 3,
+      "explanation": "The supplied practice bank identifies D — Dataflow Gen2 — as the best answer. Verify the concept against the current Microsoft Learn study guide."
+    }
+  ]
+}

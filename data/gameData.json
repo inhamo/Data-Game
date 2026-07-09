@@ -1,0 +1,173 @@
+{
+  "player": {
+    "name": "Taku",
+    "role": "Aspiring Data Engineer",
+    "level": "Final-Year Student",
+    "nextLevel": "Graduate Hire",
+    "company": "Campus Season",
+    "overall": 64,
+    "readiness": 71,
+    "cvScore": 68,
+    "applications": 3,
+    "storyProgress": 32,
+    "salary": 0,
+    "marketRate": 42000,
+    "reputation": 42,
+    "consistency": 82,
+    "burnout": 18,
+    "focusPoints": 3
+  },
+  "story": {
+    "title": "From final year to first offer",
+    "subtitle": "A playable career campaign where every step unlocks the next opportunity.",
+    "chapters": [
+      {
+        "id": "school",
+        "navLabel": "Finish School",
+        "status": "Active objective",
+        "title": "The final semester sprint",
+        "scene": "You are one month from finishing school. Marks still matter, but the real game has started: projects, references, proof of skill, and the first serious job hunt.",
+        "briefing": "Balance exam pressure with career momentum. Finish the capstone, collect evidence of your work, and protect your consistency meter before burnout starts costing you choices.",
+        "beats": [
+          { "title": "Submit capstone project", "detail": "Turn your analytics project into a portfolio-ready case study.", "done": true },
+          { "title": "Ask lecturer for reference", "detail": "A strong academic reference can skip one screening stage.", "done": false },
+          { "title": "Choose final-year focus", "detail": "Spend focus points on SQL, Python, or stakeholder communication.", "done": false }
+        ],
+        "rewards": ["+8 Readiness", "Lecturer reference", "Portfolio case study"]
+      },
+      {
+        "id": "portfolio",
+        "navLabel": "Create CV",
+        "status": "Unlocked",
+        "title": "Build the career card",
+        "scene": "Your CV is your player card. Recruiters will judge your overall rating in seconds, so weak sections need to be upgraded before you enter the job board.",
+        "briefing": "Convert school work into business impact. Replace generic claims with evidence, sharpen the skills section, and make one project read like a real workplace result.",
+        "beats": [
+          { "title": "Write profile summary", "detail": "Make it specific to data roles instead of sounding like a template.", "done": true },
+          { "title": "Upgrade project impact", "detail": "Turn tasks into outcomes, numbers, and tools used.", "done": false },
+          { "title": "Patch missing keywords", "detail": "Add role-specific keywords without stuffing the CV.", "done": false }
+        ],
+        "rewards": ["+12 CV score", "ATS boost", "Interview unlock chance"]
+      },
+      {
+        "id": "board",
+        "navLabel": "Job Board",
+        "status": "Scouting",
+        "title": "Enter the opportunity market",
+        "scene": "The board opens like a transfer market. Some roles fit your current build. Others are tempting, but applying too early can burn time and confidence.",
+        "briefing": "Scout roles by match percentage, salary range, skill gap, and application cost. The smart play is not applying everywhere, it is applying where your story lands.",
+        "beats": [
+          { "title": "Shortlist three roles", "detail": "Pick a safe role, a reach role, and a wild-card role.", "done": false },
+          { "title": "Compare skill gaps", "detail": "Use the board to decide what to improve before applying.", "done": false },
+          { "title": "Save one dream company", "detail": "Long-term goals become future season content.", "done": false }
+        ],
+        "rewards": ["Opportunity board", "Market insight", "+5 Strategy"]
+      },
+      {
+        "id": "apply",
+        "navLabel": "Apply",
+        "status": "Locked until CV score 75",
+        "title": "Application matchday",
+        "scene": "Every application is a match. Your CV, cover note, timing, and referrals all affect the result before a human ever reads the full page.",
+        "briefing": "Prepare a tailored application. Spend effort where it matters: role fit, proof of impact, and a short message that sounds human.",
+        "beats": [
+          { "title": "Tailor CV to selected role", "detail": "Move the most relevant project into the first scan zone.", "done": false },
+          { "title": "Write recruiter note", "detail": "Keep it short, specific, and tied to the company problem.", "done": false },
+          { "title": "Submit before deadline", "detail": "Late applications lose momentum and referral bonuses.", "done": false }
+        ],
+        "rewards": ["Application sent", "+10 Confidence", "Screening roll"]
+      },
+      {
+        "id": "interview",
+        "navLabel": "Interview",
+        "status": "Coming next",
+        "title": "The interview gauntlet",
+        "scene": "The interview is not one boss fight. It is a series: recruiter screen, technical task, culture conversation, and salary expectations.",
+        "briefing": "Prepare stories, practice SQL pressure questions, and decide what salary range you can defend without sounding random.",
+        "beats": [
+          { "title": "Practice technical challenge", "detail": "SQL joins, messy data, and explaining trade-offs under time pressure.", "done": false },
+          { "title": "Prepare story bank", "detail": "Use STAR stories for conflict, learning, and delivery.", "done": false },
+          { "title": "Set salary anchor", "detail": "Know market range before the recruiter asks.", "done": false }
+        ],
+        "rewards": ["Interview confidence", "Technical XP", "Negotiation prep"]
+      },
+      {
+        "id": "offer",
+        "navLabel": "First Offer",
+        "status": "Season finale",
+        "title": "Negotiate the first contract",
+        "scene": "The offer arrives. It feels like the finish line, but now the salary, growth path, manager quality, and learning curve all matter.",
+        "briefing": "Compare the offer like a pro. Counter respectfully, check the growth path, and decide whether this is a launchpad or a trap.",
+        "beats": [
+          { "title": "Read total package", "detail": "Base pay, benefits, training budget, remote policy, and probation terms.", "done": false },
+          { "title": "Run negotiation mini-game", "detail": "Counter too high and risk tension. Accept too fast and leave value behind.", "done": false },
+          { "title": "Start first job season", "detail": "Unlock tickets, teammates, reviews, and production consequences.", "done": false }
+        ],
+        "rewards": ["Graduate Hire title", "Salary unlocked", "Career sim season 1"]
+      }
+    ],
+    "allies": [
+      { "name": "Maya", "role": "Classmate building dashboards", "buff": "+CV proof" },
+      { "name": "Mr Dlamini", "role": "Lecturer reference", "buff": "+Screening trust" },
+      { "name": "Aisha", "role": "Recruiter contact", "buff": "+Board intel" }
+    ]
+  },
+  "skills": [
+    { "name": "SQL", "score": 72, "xp": 2440, "next": 3400, "type": "Technical" },
+    { "name": "Python", "score": 66, "xp": 2090, "next": 3200, "type": "Technical" },
+    { "name": "Excel", "score": 78, "xp": 3040, "next": 3800, "type": "Technical" },
+    { "name": "Storytelling", "score": 61, "xp": 1710, "next": 2900, "type": "Communication" },
+    { "name": "Interviewing", "score": 48, "xp": 980, "next": 2400, "type": "Career" },
+    { "name": "Consistency", "score": 82, "xp": 2840, "next": 3600, "type": "Reliability" }
+  ],
+  "jobBoard": [
+    {
+      "id": "JOB-101",
+      "title": "Graduate Data Analyst",
+      "company": "Northstar Analytics",
+      "location": "Hybrid",
+      "match": 84,
+      "hook": "Strong fit for your Excel, SQL, and capstone project. Communication score is the promotion path.",
+      "tags": ["Safe role", "SQL", "Dashboarding", "Good mentor"]
+    },
+    {
+      "id": "JOB-204",
+      "title": "Junior Data Engineer",
+      "company": "BrightCart",
+      "location": "Remote",
+      "match": 71,
+      "hook": "A reach role with pipeline exposure. Python needs one more proof point before applying.",
+      "tags": ["Reach role", "Python", "Pipelines", "Fast growth"]
+    },
+    {
+      "id": "JOB-318",
+      "title": "Business Intelligence Intern",
+      "company": "Finovo Bank",
+      "location": "On-site",
+      "match": 76,
+      "hook": "Lower title, strong brand signal. Could become a reputation play if you perform well.",
+      "tags": ["Brand boost", "Excel", "Stakeholders", "Structured"]
+    }
+  ],
+  "cvBuilder": {
+    "score": 68,
+    "sections": [
+      { "name": "Profile", "state": "Playable", "note": "Good opening, needs sharper role targeting." },
+      { "name": "Projects", "state": "Upgrade", "note": "Capstone needs measurable impact and tools used." },
+      { "name": "Skills", "state": "Strong", "note": "SQL and Excel are clear. Python needs proof." },
+      { "name": "Experience", "state": "Thin", "note": "Use school, freelance, and volunteer work as evidence." }
+    ]
+  },
+  "activeTickets": [],
+  "weeklyWins": [],
+  "rewards": [],
+  "consequences": [],
+  "teamFeed": [],
+  "review": {
+    "quarter": "Pre-career",
+    "rating": "Building momentum",
+    "managerNote": "The next unlock is not more motivation. It is a stronger story, cleaner CV evidence, and smarter applications.",
+    "goals": []
+  },
+  "skillTree": []
+}
