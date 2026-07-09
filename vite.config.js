@@ -149,5 +149,6 @@ Create 20 challenging, practical questions for the selected track. If the track 
 }
 
 export default defineConfig({
-  plugins: [react(), geminiBridge()]
+  plugins: [react(), geminiBridge()],
+  base: 'https://github.com/inhamo/Data-Game/'
 });
