@@ -1,5 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import fs from "node:fs";
+
+const npcPrompts = JSON.parse(fs.readFileSync(new URL("./src/data/npc-system-prompts.json", import.meta.url), "utf8"));
 
 function geminiBridge() {
   return {
@@ -16,8 +19,13 @@ function geminiBridge() {
           response.setHeader("Content-Type", "application/json");
           try {
             const { message, context = "", persona = "Priya", mode = "chat" } = JSON.parse(raw || "{}");
+            const meetingRoles = Object.fromEntries(Object.entries(npcPrompts.characters).map(([key, character]) => [
+              key[0].toUpperCase() + key.slice(1),
+              `${npcPrompts.humanTexture}\n${character.system}\nRequired probe: ${character.requiredProbe}`
+            ]));
             const roles = {
-              Priya: "Priya Shah, a calm senior data analyst mentoring a junior on the Solstice Retail loyalty project. Guide their reasoning without doing the whole project for them. Be concise, practical, and ask one useful follow-up question.",
+              ...meetingRoles,
+              Recruiter: "a professional Talent Acquisition partner conducting a first-round screening interview. You are warm, observant, concise, and realistic. Assess motivation, communication, eligibility, availability, work preferences, salary expectations, and evidence from the candidate's background. Do not conduct the technical interview and never impersonate the hiring manager or Priya.",
               Family: "a supportive close family member messaging a final-year student on WhatsApp. Sound natural, warm, brief, and conversational. Never mention being an AI. This is a free conversation, but your quiet goal is to learn what the student wants to do after university and whether they have a company in mind. Respond to what they actually say. If their after-university plan is still unknown, gently ask what they are thinking of doing after university. Once that is known but the company is unknown, ask whether there is a company they hope to work for. Never treat a greeting or unrelated message as a career answer.",
               Thando: "Thando Mokoena, the student's close university friend messaging on WhatsApp. Sound casual, friendly, brief, and natural. Never mention being an AI."
             };
@@ -36,7 +44,7 @@ Return only JSON with this shape:
 {"reply":"your WhatsApp reply","afterUni":"","expectedCompany":""}
 Only populate afterUni or expectedCompany when the student's latest message clearly supplies that information. Otherwise use an empty string.`
               : interviewMode ? `${prompt}
-Create 8 realistic interview questions for this exact company and role. Mix personal motivation, behavioural situations, stakeholder judgement, SQL/Python, data quality, analysis, and Power BI. Avoid trivia. Each question has two plausible responses and a correct response index. Return JSON only.`
+Create 8 realistic questions for this exact interview format, company, and role. For a Talent Acquisition conversation, focus on motivation, communication, eligibility, availability, working preferences, salary expectations, and behavioural evidence; do not ask SQL, Python, Power BI, or technical assessment questions. Each question has two plausible responses and a correct response index. Return JSON only.`
               : assessmentMode ? `${prompt}
 Create 20 challenging, practical questions for the selected track. If the track is Python, keep the test purely about Python and pandas: syntax, data structures, functions, exceptions, environments, DataFrame selection, merge, groupby, nulls, duplicates, dtypes, dates, vectorisation, validation, and exporting. Do not turn the Python test into generic business-analysis questions. If the track is SQL, focus on real querying, joins, grain, aggregation, windows, null behaviour, validation, transactions, and debugging. Test working knowledge rather than vocabulary trivia. Each question must have four plausible options and a correct response index from 0 to 3. Return JSON only.`
               : prompt;
@@ -148,7 +156,7 @@ Create 20 challenging, practical questions for the selected track. If the track 
   };
 }
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react(), geminiBridge()],
-  base: 'https://github.com/inhamo/Data-Game/'
-});
+  base: command === "build" ? "/Data-Game/" : "/"
+}));

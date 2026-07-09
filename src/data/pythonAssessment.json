@@ -1,0 +1,22 @@
+[
+  ["Which type stores key-value pairs?", "dict", "list", 0],
+  ["What does len(values) return?", "Number of items", "Largest item", 0],
+  ["Which keyword defines a function?", "def", "func", 0],
+  ["Which operator checks equality?", "==", "=", 0],
+  ["What is the first list index?", "0", "1", 0],
+  ["Which statement handles exceptions?", "try / except", "if / then", 0],
+  ["What does range(3) produce for iteration?", "0, 1, 2", "1, 2, 3", 0],
+  ["Which method adds one item to a list?", "append()", "push()", 0],
+  ["What is a boolean value?", "True or False", "Any text value", 0],
+  ["Which library is widely used for tabular data?", "pandas", "requests", 0],
+  ["How do you import pandas conventionally?", "import pandas as pd", "include pandas", 0],
+  ["Which pandas method previews the first rows?", "head()", "top()", 0],
+  ["Which value commonly represents missing pandas data?", "NaN", "EMPTY", 0],
+  ["What does df.drop_duplicates() do?", "Removes duplicate rows", "Drops every column", 0],
+  ["Which expression selects a DataFrame column?", "df['sales']", "df->sales", 0],
+  ["Which pandas method groups rows?", "groupby()", "cluster()", 0],
+  ["Why use a virtual environment?", "To isolate project dependencies", "To make Python run offline", 0],
+  ["Which mode opens a file for reading?", "'r'", "'w'", 0],
+  ["What does a list comprehension create?", "A list from an iterable expression", "A database table", 0],
+  ["Which is safer for secrets?", "Environment variables", "Hard-coding them in source", 0]
+]

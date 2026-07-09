@@ -1,0 +1,10 @@
+[
+  ["Introduction", "Before we get into the role, tell me about yourself and what drew you to data.", "I enjoy turning unclear problems into evidence people can use, and my degree gave me the technical foundation to do that.", "I chose data because it seemed like a safe career and I am open to anything.", 0],
+  ["Motivation", "Why are you interested in Solstice Retail Group and this graduate role?", "The role combines data quality, analysis, and stakeholder work, which matches the kind of analyst I want to become.", "It was one of several jobs I applied for and the salary looked reasonable.", 0],
+  ["Behavioural", "Tell me how you would respond if you made a mistake in a report sent to a manager.", "Correct it quietly in the next report and hope nobody used the first version.", "Raise it quickly, explain the impact, issue a corrected version, and prevent the same mistake recurring.", 1],
+  ["SQL", "A customer table contains duplicate email addresses. Which query identifies them?", "GROUP BY email HAVING COUNT(*) > 1", "ORDER BY email DESC", 0],
+  ["SQL", "You need to filter grouped sales totals above 100,000. Which clause is correct?", "WHERE SUM(sales) > 100000", "HAVING SUM(sales) > 100000", 1],
+  ["Analysis", "Sales fell this week. What is the strongest first response?", "Segment the change by product, region, channel, and date", "Assume marketing caused it", 0],
+  ["Data quality", "A source column suddenly has 40% null values. What should you do first?", "Replace all nulls with zero", "Check the source, definition, and pipeline change history", 1],
+  ["Communication", "A stakeholder requests a misleading chart. What is the best response?", "Explain the risk and propose a truthful alternative", "Build it exactly as requested", 0]
+]

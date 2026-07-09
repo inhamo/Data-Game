@@ -9,6 +9,16 @@
     {"category":"Power BI","question":"A report total is correct but regional totals are wrong. Where do you look?","options":["Model relationships, filter context, and measure logic","Increase the report refresh frequency"],"correct":0},
     {"category":"Communication","question":"You have five minutes with an executive. How do you present your analysis?","options":["Lead with the answer, impact, evidence, and decision required","Describe every analytical step in chronological order"],"correct":0}
   ],
+  "recruiterQuestions": [
+    {"category":"Introduction","question":"Tell me about yourself and why this graduate data role is the right next step for you.","options":["Connect your degree, evidence of interest in data, and the direction you want to grow","List every module you completed without explaining what it means for this role"],"correct":0},
+    {"category":"Motivation","question":"Why did you apply to this company rather than only applying for any available data job?","options":["Connect the company, role, and work to a specific reason that matters to you","Say that it was the first vacancy with an Easy Apply button"],"correct":0},
+    {"category":"Availability","question":"The role starts next month and follows a hybrid schedule. How would you answer an availability question?","options":["State your honest start date and any genuine constraints clearly","Promise immediate availability even when you know that is impossible"],"correct":0},
+    {"category":"Work preferences","question":"How do you feel about working with both technical colleagues and non-technical stakeholders?","options":["Give an example of adapting how you communicate while preserving accuracy","Say you prefer to avoid people and only receive written technical tasks"],"correct":0},
+    {"category":"Behavioural","question":"Tell me about a time you received difficult feedback.","options":["Explain the feedback, how you responded, and what changed afterward","Claim that you have never received corrective feedback"],"correct":0},
+    {"category":"Salary","question":"What is the strongest way to handle a salary-expectation question in an initial screening?","options":["Give a researched range while showing openness to the complete package and responsibilities","Refuse to discuss expectations and demand the highest possible offer"],"correct":0},
+    {"category":"Eligibility","question":"Are you legally eligible to work in the role’s location, and would you require sponsorship?","options":["Answer accurately and explain any sponsorship requirement directly","Give the answer you think the recruiter wants and correct it after receiving an offer"],"correct":0},
+    {"category":"Candidate questions","question":"The recruiter asks whether you have any questions. What is the strongest response?","options":["Ask about the team, expectations for the first months, and the remaining hiring process","Say no because asking questions might make you look difficult"],"correct":0}
+  ],
   "sqlAssessment": [
     {"question":"Which clause filters rows before aggregation?","options":["WHERE","HAVING"],"correct":0},
     {"question":"Which clause filters aggregated groups?","options":["WHERE","HAVING"],"correct":1},

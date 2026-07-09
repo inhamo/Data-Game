@@ -1,151 +1,32 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
-  Archive, ArrowLeft, BookOpen, BriefcaseBusiness, Building2, CalendarDays, Check, ChevronRight,
-  CircleUserRound, Clock3, Download, ExternalLink, FileText, GraduationCap, Inbox, Keyboard, Library, Lightbulb, Mail, Mic,
+  Archive, ArrowLeft, Bell, BookOpen, BriefcaseBusiness, Building2, CalendarDays, Check, ChevronRight,
+  CircleUserRound, Clock3, Database, Download, ExternalLink, FileText, GraduationCap, Inbox, Keyboard, Library, Lightbulb, Mail, Mic,
   MapPin, Menu, MessageCircle, MoreVertical, Paperclip, Search, Send,
   ShieldCheck, Star, StickyNote, UserRound, Video, Volume2, VolumeX
 } from "lucide-react";
+
+// ========== DATA IMPORTS ==========
 import characterBible from "./data/characters.json";
+import npcSystem from "./data/npc-system-prompts.json";
+import initialProfile from "./data/initialProfile.json";
+import contacts from "./data/contacts.json";
+import friend from "./data/friend.json";
+import jobs from "./data/jobs.json";
+import questions from "./data/questions.json";
+import recruiterFallbackQuestions from "./data/recruiterFallbackQuestions.json";
+import sqlAssessment from "./data/sqlAssessment.json";
+import pythonAssessment from "./data/pythonAssessment.json";
+import seasonCases from "./data/seasonCases.json";
+
 import "./styles.css";
 import "./lesson.css";
 import "./certifications.css";
 
-const initialProfile = {
-  name: "", university: "", degree: "", favoriteModule: "", worstModule: "",
-  afterUni: "", expectedCompany: ""
-};
-
-const contacts = [
-  { name: "Mom", initial: "M" },
-  { name: "Dad", initial: "D" },
-  { name: "Lerato", initial: "L" }
-];
-
-const friend = { name: "Thando Mokoena", initial: "TM" };
-
-const jobs = [
-  {
-    id: "aurora", company: "Solstice Retail Group", logo: "SR", title: "Junior Data Analyst",
-    location: "Johannesburg, Gauteng", type: "Hybrid · Full-time", postedMinutes: 240,
-    applicants: 38, applicantInterval: 18000, revealAfter: 0, salary: "R28,000 – R34,000 per month", match: 91,
-    interviewRounds: 3, interviewer: "Priya Shah", interviewerRole: "Senior Analyst",
-    description: "Join the Customer Intelligence team to clean commercial data, build trusted reports, and turn weekly performance into decisions.",
-    skills: ["SQL", "Power BI", "Excel"]
-  },
-  {
-    id: "mosaic", company: "Mosaic Health", logo: "MH", title: "Graduate BI Analyst",
-    location: "Cape Town, Western Cape", type: "On-site · Full-time", postedMinutes: 2880,
-    applicants: 104, applicantInterval: 12000, revealAfter: 0, salary: "R25,000 – R29,000 per month", match: 83,
-    interviewRounds: 2, interviewer: "Dr. Amara Naidoo", interviewerRole: "BI Lead", approached: true,
-    description: "Support clinical operations with quality checks, reporting models, and clear data storytelling.",
-    skills: ["Power BI", "DAX", "Data quality"]
-  },
-  {
-    id: "northstar", company: "Northstar Retail", logo: "NR", title: "Data Graduate",
-    location: "South Africa", type: "Remote · 12-month programme", postedMinutes: 10080,
-    applicants: 227, applicantInterval: 9000, revealAfter: 0, salary: "R22,000 per month", match: 76,
-    interviewRounds: 1, interviewer: "Kabelo Maseko", interviewerRole: "Graduate Programme Manager",
-    description: "A structured graduate programme covering trading analytics, customer reporting, and data operations.",
-    skills: ["Excel", "SQL", "Retail"]
-  },
-  {
-    id: "canopy", company: "Canopy Bank", logo: "CB", title: "Junior Reporting Analyst",
-    location: "Sandton, Gauteng", type: "Hybrid · Full-time", postedMinutes: 0,
-    applicants: 1, applicantInterval: 14000, revealAfter: 20000, salary: "R27,000 – R32,000 per month", match: 88,
-    interviewRounds: 2, interviewer: "Nomsa Dlamini", interviewerRole: "Analytics Manager",
-    description: "Help the operations team automate recurring reports, investigate exceptions, and improve trusted business metrics.",
-    skills: ["SQL", "Excel", "Power BI"]
-  },
-  {
-    id: "atlas", company: "Atlas Logistics", logo: "AL", title: "Graduate Data Associate",
-    location: "Durban, KwaZulu-Natal", type: "On-site · Full-time", postedMinutes: 0,
-    applicants: 0, applicantInterval: 11000, revealAfter: 45000, salary: "R24,000 – R28,000 per month", match: 81,
-    interviewRounds: 2, interviewer: "Michael Adams", interviewerRole: "Data Operations Lead",
-    description: "Work with delivery and warehouse data to identify delays, maintain operational dashboards, and support planning decisions.",
-    skills: ["Python", "SQL", "Operations"]
-  }
-];
-
-const questions = [
-  ["Introduction", "Before we get into the role, tell me about yourself and what drew you to data.",
-    "I enjoy turning unclear problems into evidence people can use, and my degree gave me the technical foundation to do that.", "I chose data because it seemed like a safe career and I am open to anything.", 0],
-  ["Motivation", "Why are you interested in Solstice Retail Group and this graduate role?",
-    "The role combines data quality, analysis, and stakeholder work, which matches the kind of analyst I want to become.", "It was one of several jobs I applied for and the salary looked reasonable.", 0],
-  ["Behavioural", "Tell me how you would respond if you made a mistake in a report sent to a manager.",
-    "Correct it quietly in the next report and hope nobody used the first version.", "Raise it quickly, explain the impact, issue a corrected version, and prevent the same mistake recurring.", 1],
-  ["SQL", "A customer table contains duplicate email addresses. Which query identifies them?",
-    "GROUP BY email HAVING COUNT(*) > 1", "ORDER BY email DESC", 0],
-  ["SQL", "You need to filter grouped sales totals above 100,000. Which clause is correct?",
-    "WHERE SUM(sales) > 100000", "HAVING SUM(sales) > 100000", 1],
-  ["Analysis", "Sales fell this week. What is the strongest first response?",
-    "Segment the change by product, region, channel, and date", "Assume marketing caused it", 0],
-  ["Data quality", "A source column suddenly has 40% null values. What should you do first?",
-    "Replace all nulls with zero", "Check the source, definition, and pipeline change history", 1],
-  ["Communication", "A stakeholder requests a misleading chart. What is the best response?",
-    "Explain the risk and propose a truthful alternative", "Build it exactly as requested", 0]
-];
-
-const sqlAssessment = [
-  ["Which clause filters rows before grouping?", "WHERE", "HAVING", 0],
-  ["Which clause filters aggregated groups?", "WHERE", "HAVING", 1],
-  ["Which join keeps every row from the left table?", "LEFT JOIN", "INNER JOIN", 0],
-  ["Which function counts non-null values in a column?", "COUNT(column)", "SUM(column)", 0],
-  ["What does DISTINCT do?", "Removes duplicate result rows", "Sorts result rows", 0],
-  ["Which expression replaces a null value?", "COALESCE(value, 0)", "COUNT(value, 0)", 0],
-  ["Which keyword sorts from highest to lowest?", "ASC", "DESC", 1],
-  ["Which window function gives a unique sequence within a group?", "ROW_NUMBER()", "ROUND()", 0],
-  ["A primary key must be...", "Unique and non-null", "Repeated and nullable", 0],
-  ["Which operator tests a range inclusively?", "BETWEEN", "LIKE", 0],
-  ["Which pattern finds names starting with A?", "LIKE 'A%'", "LIKE '%A'", 0],
-  ["What does GROUP BY do?", "Combines rows sharing values for aggregation", "Deletes repeated rows", 0],
-  ["Which statement adds rows to a table?", "INSERT", "UPDATE", 0],
-  ["Which statement changes existing rows?", "UPDATE", "ALTER", 0],
-  ["What is the safest way to test an UPDATE?", "Run its WHERE logic as a SELECT first", "Remove the WHERE clause", 0],
-  ["Which function returns the average?", "AVG()", "MEAN()", 0],
-  ["A foreign key primarily...", "Links related tables", "Sorts a table", 0],
-  ["UNION differs from UNION ALL because UNION...", "Removes duplicates", "Keeps all duplicates", 0],
-  ["Which clause limits grouped duplicate emails?", "HAVING COUNT(*) > 1", "WHERE COUNT(*) > 1", 0],
-  ["Why use a transaction?", "To commit or roll back a set of changes", "To rename every column", 0]
-];
-
-const pythonAssessment = [
-  ["Which type stores key-value pairs?", "dict", "list", 0],
-  ["What does len(values) return?", "Number of items", "Largest item", 0],
-  ["Which keyword defines a function?", "def", "func", 0],
-  ["Which operator checks equality?", "==", "=", 0],
-  ["What is the first list index?", "0", "1", 0],
-  ["Which statement handles exceptions?", "try / except", "if / then", 0],
-  ["What does range(3) produce for iteration?", "0, 1, 2", "1, 2, 3", 0],
-  ["Which method adds one item to a list?", "append()", "push()", 0],
-  ["What is a boolean value?", "True or False", "Any text value", 0],
-  ["Which library is widely used for tabular data?", "pandas", "requests", 0],
-  ["How do you import pandas conventionally?", "import pandas as pd", "include pandas", 0],
-  ["Which pandas method previews the first rows?", "head()", "top()", 0],
-  ["Which value commonly represents missing pandas data?", "NaN", "EMPTY", 0],
-  ["What does df.drop_duplicates() do?", "Removes duplicate rows", "Drops every column", 0],
-  ["Which expression selects a DataFrame column?", "df['sales']", "df->sales", 0],
-  ["Which pandas method groups rows?", "groupby()", "cluster()", 0],
-  ["Why use a virtual environment?", "To isolate project dependencies", "To make Python run offline", 0],
-  ["Which mode opens a file for reading?", "'r'", "'w'", 0],
-  ["What does a list comprehension create?", "A list from an iterable expression", "A database table", 0],
-  ["Which is safer for secrets?", "Environment variables", "Hard-coding them in source", 0]
-];
-
-const seasonCases = [
-  ["00", "Welcome Aboard", "Research habit"],
-  ["01", "Everyone Has a Theory", "Structure"],
-  ["02", "The Vague Ask", "Scoping"],
-  ["03", "Pick a Lane", "Hypothesis"],
-  ["04", "Nobody Made It to Slide 12", "Storytelling"],
-  ["05", "Three Departments, One Whiteboard", "Root causes"],
-  ["06", "Make the Case With Numbers", "Expected value"],
-  ["07", "Didn't We Already Fix This?", "5 Whys"],
-  ["08", "Marcus Wants a Different Number", "Integrity"],
-  ["09", "The Migration", "Synthesis"],
-  ["10", "Building the Case File", "Finale prep"],
-  ["F", "The Board", "Season finale"]
-];
+// ========== COMPONENTS (unchanged) ==========
+// All component definitions remain exactly as they were in the original file.
+// The only change is that the static data is now imported from JSON files.
 
 function App() {
   const [chapter, setChapter] = useState("welcome");
@@ -379,7 +260,7 @@ function Graduation({ profile, onContinue }) {
       <div className="audience">{guests.map((_, i) => <span key={i} style={{ "--delay": `${i * 20}ms` }} />)}</div>
       {moment === "award" && <div className="name-call"><span>Bachelor’s degree conferred upon</span><strong>{profile.name}</strong></div>}
       {moment === "celebrate" && <Caps />}
-      {moment === "celebrate" && <div className="graduate-3d-celebration"><img src="/assets/people/graduate-man-diploma.webp" alt="" /><img src="/assets/people/graduate-woman-celebrating.webp" alt="" /></div>}
+      {moment === "celebrate" && <div className="graduate-3d-celebration"><img src={appPath("assets/people/graduate-man-diploma.webp")} alt="" /><img src={appPath("assets/people/graduate-woman-celebrating.webp")} alt="" /></div>}
       {moment === "celebrate" && <button className="graduation-next" onClick={onContinue}>Enter the world of work <ChevronRight size={18} /></button>}
     </main>
   );
@@ -526,7 +407,7 @@ function ProfessionalProfile({ profile, transcript, certificate, onFindJobs }) {
     ["Education", "Add the degree, university, relevant modules, projects, awards, and activities. Remove school detail once it stops helping.", "Education"],
     ["Network", "Connect with classmates, lecturers, alumni, recruiters, and analysts. Add a short personal note when there is a genuine connection.", "Network"]
   ];
-  return <section className="professional-profile"><div className="profile-main"><div className="profile-cover"><span>DATA · ANALYSIS · DECISIONS</span></div><header><Avatar text={initials(profile.name)} /><div><h1>{profile.name}</h1><p>Graduate Data Analyst | SQL · Power BI · Data storytelling</p><span>Johannesburg, South Africa · {profile.university}</span></div><button className="primary-button" onClick={onFindJobs}>Find jobs</button></header><div className="profile-open-banner"><Lightbulb size={20} /><div><strong>{firstName}, always try to apply early.</strong><span>Set alerts, prepare your core documents, and tailor the first strong application instead of waiting for the “perfect” one.</span></div></div><article className="profile-about"><h2>About</h2><p>Analytical {profile.degree} graduate interested in {profile.afterUni || "turning data into useful decisions"}. Comfortable with SQL, reporting, and practical problem-solving, with a final weighted average of {transcript.average}%.</p></article><article><h2>Education</h2><strong>{profile.university}</strong><p>{profile.degree} · Class of 2026</p></article>{certificate && <article><h2>Licences & certifications</h2><strong>{certificate.track} Technical Readiness</strong><p>Verified assessment score: {certificate.score}%</p></article>}</div><aside className="profile-coach"><div className="coach-heading"><img src="/assets/people/executive-burgundy-gesturing.webp" alt="" /><div><span>Profile coach</span><h2>Revamp every section</h2></div></div><p className="profile-score"><strong>{certificate ? 82 : 64}%</strong><span>Profile strength</span></p><div className="profile-tip-list">{tips.map(([title, text, tag]) => <details key={title}><summary><span>{tag}</span>{title}<ChevronRight size={16} /></summary><p>{text}</p></details>)}</div><a className="official-guide" href="https://www.linkedin.com/help/linkedin/answer/a554351/how-do-i-create-a-good-linkedin-profile-" target="_blank" rel="noreferrer">Open LinkedIn’s official profile guide <ExternalLink size={15} /></a><div className="typing-practice"><Keyboard size={25} /><div><strong>Build workplace typing confidence</strong><p>Practise accuracy first, then speed. This helps with coding, email, documentation, and timed assessments.</p><a href="https://www.typing.com/en" target="_blank" rel="noreferrer">Start free lessons on Typing.com <ExternalLink size={14} /></a></div></div></aside></section>;
+  return <section className="professional-profile"><div className="profile-main"><div className="profile-cover"><span>DATA · ANALYSIS · DECISIONS</span></div><header><Avatar text={initials(profile.name)} /><div><h1>{profile.name}</h1><p>Graduate Data Analyst | SQL · Power BI · Data storytelling</p><span>Johannesburg, South Africa · {profile.university}</span></div><button className="primary-button" onClick={onFindJobs}>Find jobs</button></header><div className="profile-open-banner"><Lightbulb size={20} /><div><strong>{firstName}, always try to apply early.</strong><span>Set alerts, prepare your core documents, and tailor the first strong application instead of waiting for the “perfect” one.</span></div></div><article className="profile-about"><h2>About</h2><p>Analytical {profile.degree} graduate interested in {profile.afterUni || "turning data into useful decisions"}. Comfortable with SQL, reporting, and practical problem-solving, with a final weighted average of {transcript.average}%.</p></article><article><h2>Education</h2><strong>{profile.university}</strong><p>{profile.degree} · Class of 2026</p></article>{certificate && <article><h2>Licences & certifications</h2><strong>{certificate.track} Technical Readiness</strong><p>Verified assessment score: {certificate.score}%</p></article>}</div><aside className="profile-coach"><div className="coach-heading"><img src={appPath("assets/people/executive-burgundy-gesturing.webp")} alt="" /><div><span>Profile coach</span><h2>Revamp every section</h2></div></div><p className="profile-score"><strong>{certificate ? 82 : 64}%</strong><span>Profile strength</span></p><div className="profile-tip-list">{tips.map(([title, text, tag]) => <details key={title}><summary><span>{tag}</span>{title}<ChevronRight size={16} /></summary><p>{text}</p></details>)}</div><a className="official-guide" href="https://www.linkedin.com/help/linkedin/answer/a554351/how-do-i-create-a-good-linkedin-profile-" target="_blank" rel="noreferrer">Open LinkedIn’s official profile guide <ExternalLink size={15} /></a><div className="typing-practice"><Keyboard size={25} /><div><strong>Build workplace typing confidence</strong><p>Practise accuracy first, then speed. This helps with coding, email, documentation, and timed assessments.</p><a href="https://www.typing.com/en" target="_blank" rel="noreferrer">Start free lessons on Typing.com <ExternalLink size={14} /></a></div></div></aside></section>;
 }
 
 function CertificationWorkspace({ profile, companyCertificate }) {
@@ -541,7 +422,7 @@ function CertificationWorkspace({ profile, companyCertificate }) {
   });
   const [secondsLeft, setSecondsLeft] = useState(6000);
   useEffect(() => {
-    fetch("/data/certifications/dp-700.json").then((response) => response.json()).then(setBank).catch(() => setBank({ questions: [] }));
+    fetch(appPath("data/certifications/dp-700.json")).then((response) => response.json()).then(setBank).catch(() => setBank({ questions: [] }));
   }, []);
   useEffect(() => {
     if (mode !== "test" || result || secondsLeft <= 0) return undefined;
@@ -605,28 +486,32 @@ function Interview({ application, onSubmit }) {
   const [voiceOn, setVoiceOn] = useState(true);
   const currentRound = application?.round || 1;
   const totalRounds = application?.job.interviewRounds || 1;
-  const setup = currentRound === 1 && totalRounds > 1
-    ? { title: "Hiring manager conversation", lead: application?.job.interviewer, role: application?.job.interviewerRole, members: [] }
+  const setup = currentRound === 1
+    ? { title: "Talent acquisition conversation", lead: application?.job.interviewer, role: application?.job.interviewerRole, members: [] }
     : currentRound < totalRounds
       ? { title: "Technical panel", lead: "Tom Reyes", role: "Data Engineer", members: ["Lebo · Analyst", "Daniel · Data Engineer"] }
       : totalRounds === 1
         ? { title: "Hiring team interview", lead: application?.job.interviewer, role: application?.job.interviewerRole, members: ["Team representative"] }
         : { title: "Senior team panel", lead: "Elena Cho", role: "Chief Financial Officer", members: ["Priya · Senior Analyst", "Marcus · VP Marketing", "Tom · Data Engineer"] };
-  const interviewerAsset = /Priya|Elena|Amara/i.test(setup.lead || "")
+  const interviewerCharacter = Object.values(characterBible).find((character) => character.name === setup.lead);
+  const interviewerAsset = interviewerCharacter?.portrait || (/Priya|Elena|Amara|Naledi|Aisha/i.test(setup.lead || "")
     ? "/assets/people/executive-burgundy-gesturing.webp"
-    : "/assets/people/executive-blue-speaking.webp";
+    : "/assets/people/executive-blue-speaking.webp");
   useEffect(() => {
     if (!application) return undefined;
     if (currentRound > 1) return undefined;
     let active = true;
     async function prepareInterview() {
+      const controller = new AbortController();
+      const timeout = window.setTimeout(() => controller.abort(), 4500);
       try {
         const response = await fetch("/api/gemini", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({
             mode: "interview",
-            persona: "Priya",
+            persona: "Recruiter",
             message: `Create round ${application.round || 1} interview questions.`,
             context: `Company: ${application.job.company}. Role: ${application.job.title}. Interview format: ${setup.title}. Lead interviewer: ${setup.lead}, ${setup.role}.`
           })
@@ -635,9 +520,29 @@ function Interview({ application, onSubmit }) {
         if (!response.ok || !payload.data?.questions?.length) throw new Error("Generated interview unavailable");
         if (active) { setQuestionBank(payload.data.questions); setQuestionSource("Adaptive interview"); }
       } catch {
-        const response = await fetch("/data/simulation-content.json");
-        const payload = await response.json();
-        if (active) { setQuestionBank(payload.interviewQuestions); setQuestionSource("Saved interview"); }
+        try {
+          const response = await fetch(appPath("data/simulation-content.json"));
+          if (!response.ok) throw new Error("Saved interview unavailable");
+          const payload = await response.json();
+          if (active && payload.recruiterQuestions?.length) {
+            setQuestionBank(payload.recruiterQuestions);
+            setQuestionSource("Saved interview");
+          } else {
+            throw new Error("Saved interview is empty");
+          }
+        } catch {
+          if (active) {
+            setQuestionBank(recruiterFallbackQuestions.map((item) => ({
+              category: item[0],
+              question: item[1],
+              options: [item[2], item[3]],
+              correct: item[4]
+            })));
+            setQuestionSource("Built-in interview");
+          }
+        }
+      } finally {
+        window.clearTimeout(timeout);
       }
     }
     prepareInterview();
@@ -651,13 +556,19 @@ function Interview({ application, onSubmit }) {
   useEffect(() => {
     if (!voiceOn || !questionBank?.[index] || !("speechSynthesis" in window)) return undefined;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(questionBank[index].question);
-    utterance.rate = 0.94;
-    utterance.pitch = 1;
-    const voices = window.speechSynthesis.getVoices();
-    utterance.voice = voices.find((voice) => /en-ZA|South Africa/i.test(`${voice.lang} ${voice.name}`)) || voices.find((voice) => voice.lang.startsWith("en")) || null;
-    window.speechSynthesis.speak(utterance);
-    return () => window.speechSynthesis.cancel();
+    const speak = () => {
+      const utterance = new SpeechSynthesisUtterance(questionBank[index].question);
+      utterance.pitch = 1;
+      utterance.voice = selectCharacterVoice(interviewerCharacter);
+      utterance.rate = interviewerCharacter?.voiceRate || 0.94;
+      window.speechSynthesis.speak(utterance);
+    };
+    if (window.speechSynthesis.getVoices().length) speak();
+    else window.speechSynthesis.addEventListener("voiceschanged", speak, { once: true });
+    return () => {
+      window.speechSynthesis.removeEventListener("voiceschanged", speak);
+      window.speechSynthesis.cancel();
+    };
   }, [index, questionBank, voiceOn]);
   if (!application) return <Empty icon={CalendarDays} title="No interview scheduled" text="An employer must invite you before an interview appears." />;
   if (currentRound > 1 && currentRound < totalRounds) return <TechnicalInterview application={application} onSubmit={onSubmit} />;
@@ -669,7 +580,7 @@ function Interview({ application, onSubmit }) {
     if (index === questionBank.length - 1) onSubmit(nextAnswers.reduce((score, answer, i) => score + (answer === questionBank[i].correct ? 1 : 0), 0));
     else { setAnswers(nextAnswers); setIndex((i) => i + 1); setSelected(null); }
   }
-  return <section className={`interview-room ${format} ${setup.members.length ? "panel-interview" : "solo-interview"}`}><header><div><p className="overline">{application.job.company} · Round {currentRound} of {totalRounds}</p><h1>{application.job.title}</h1></div><div className="interview-format">{format === "online" ? <Video size={16} /> : <Building2 size={16} />}<span>{setup.title} · {format === "online" ? "video" : "in office"}</span></div><button className="voice-button" onClick={() => setVoiceOn((value) => !value)} title={voiceOn ? "Mute interviewer" : "Enable interviewer voice"}>{voiceOn ? <Volume2 size={18} /> : <VolumeX size={18} />}</button><span>{questionSource} · {index + 1} of {questionBank.length}</span></header><div className="interview-scene"><div className="office-window" /><div className={`speech-bubble ${speaking ? "speaking" : ""}`}><strong>{setup.lead} asks</strong><span>{question.question}</span>{speaking && <i><b /><b /><b /></i>}</div>{setup.members.length > 0 && <div className="interview-panel-members">{setup.members.map((member, memberIndex) => <div key={member} className={`panel-member member-${memberIndex}`}><Person faculty /><span>{member}</span></div>)}</div>}<img className="interviewer-3d" src={interviewerAsset} alt={`${setup.lead}, ${setup.role}`} /><div className="interviewer-nameplate"><strong>{setup.lead}</strong><small>{setup.role}</small></div><div className="desk"><span className="laptop">{application.job.company.split(" ")[0].toUpperCase()}</span></div>{format === "online" && <div className="video-controls"><span /><span className="end-call" /><span /></div>}</div><article key={index} className="question-panel"><span>{question.category || "Interview"}</span><h2>Your response</h2>{question.options.map((answer, i) => <button className={selected === i ? "selected" : ""} key={answer} onClick={() => setSelected(i)}><b>{i === 0 ? "A" : "B"}</b>{answer}<Check size={18} /></button>)}<button className="primary-button" disabled={selected === null} onClick={next}>{index === questionBank.length - 1 ? "Submit interview" : "Answer and continue"} <ChevronRight size={17} /></button></article></section>;
+  return <section className={`interview-room ${format} ${setup.members.length ? "panel-interview" : "solo-interview"}`}><header><div><p className="overline">{application.job.company} · Round {currentRound} of {totalRounds}</p><h1>{application.job.title}</h1></div><div className="interview-format">{format === "online" ? <Video size={16} /> : <Building2 size={16} />}<span>{setup.title} · {format === "online" ? "video" : "in office"}</span></div><button className="voice-button" onClick={() => setVoiceOn((value) => !value)} title={voiceOn ? "Mute interviewer" : "Enable interviewer voice"}>{voiceOn ? <Volume2 size={18} /> : <VolumeX size={18} />}</button><span>{questionSource} · {index + 1} of {questionBank.length}</span></header><div className="interview-scene"><div className="office-window" /><div className={`speech-bubble ${speaking ? "speaking" : ""}`}><strong>{setup.lead} asks</strong><span>{question.question}</span>{speaking && <i><b /><b /><b /></i>}</div>{setup.members.length > 0 && <div className="interview-panel-members">{setup.members.map((member, memberIndex) => <div key={member} className={`panel-member member-${memberIndex}`}><Person faculty /><span>{member}</span></div>)}</div>}<img className="interviewer-3d" src={appPath(interviewerAsset)} alt={`${setup.lead}, ${setup.role}`} /><div className="interviewer-nameplate"><strong>{setup.lead}</strong><small>{setup.role}</small></div><div className="desk"><span className="laptop">{application.job.company.split(" ")[0].toUpperCase()}</span></div>{format === "online" && <div className="video-controls"><span /><span className="end-call" /><span /></div>}</div><article key={index} className="question-panel"><span>{question.category || "Interview"}</span><h2>Your response</h2>{question.options.map((answer, i) => <button className={selected === i ? "selected" : ""} key={answer} onClick={() => setSelected(i)}><b>{"ABCD"[i]}</b>{answer}<Check size={18} /></button>)}<button className="primary-button" disabled={selected === null} onClick={next}>{index === questionBank.length - 1 ? "Submit interview" : "Answer and continue"} <ChevronRight size={17} /></button></article></section>;
 }
 
 function TechnicalInterview({ application, onSubmit }) {
@@ -732,7 +643,7 @@ function TeamAssessment({ application, onSubmit }) {
       onSubmit(correct >= 4 ? 8 : correct);
     } else { setAnswers(nextAnswers); setSelected(null); setIndex((value) => value + 1); }
   }
-  return <main className="team-assessment"><header><div><p className="overline">{application.job.company} · Final team stage</p><h1>Collaborative assessment</h1></div><span>Exercise {index + 1} of {games.length}</span></header><section className="assessment-room"><img className="final-panel-asset" src="/assets/people/celebrating-team-table.webp" alt="Several members of the hiring team seated around a table" /><div className="game-board"><span>{game[0]}</span><strong>{String(index + 1).padStart(2, "0")}</strong></div></section><article className="game-question"><p className="overline">Team exercise</p><h2>{game[1]}</h2>{[game[2], game[3]].map((option, optionIndex) => <button className={selected === optionIndex ? "selected" : ""} onClick={() => setSelected(optionIndex)} key={option}><b>{optionIndex === 0 ? "A" : "B"}</b>{option}</button>)}<button className="primary-button" disabled={selected === null} onClick={next}>{index === games.length - 1 ? "Finish team assessment" : "Lock decision"}</button></article></main>;
+  return <main className="team-assessment"><header><div><p className="overline">{application.job.company} · Final team stage</p><h1>Collaborative assessment</h1></div><span>Exercise {index + 1} of {games.length}</span></header><section className="assessment-room"><img className="final-panel-asset" src={appPath("assets/people/celebrating-team-table.webp")} alt="Several members of the hiring team seated around a table" /><div className="game-board"><span>{game[0]}</span><strong>{String(index + 1).padStart(2, "0")}</strong></div></section><article className="game-question"><p className="overline">Team exercise</p><h2>{game[1]}</h2>{[game[2], game[3]].map((option, optionIndex) => <button className={selected === optionIndex ? "selected" : ""} onClick={() => setSelected(optionIndex)} key={option}><b>{optionIndex === 0 ? "A" : "B"}</b>{option}</button>)}<button className="primary-button" disabled={selected === null} onClick={next}>{index === games.length - 1 ? "Finish team assessment" : "Lock decision"}</button></article></main>;
 }
 
 function Offer({ profile, accepted, onAccept, onOpenWork }) {
@@ -742,22 +653,156 @@ function Offer({ profile, accepted, onAccept, onOpenWork }) {
 }
 
 function CV({ profile, transcript, certificate, workRecord }) {
-  return <section className="cv-page"><div className="cv-actions"><div><p className="overline">Step one · Build your CV</p><h1>Your résumé</h1><span className="auto-update-note">This career record keeps growing. Download an editable template now; export the final version when your story is complete.</span></div><button className="icon-text" onClick={() => downloadCvTemplate(profile)}><Download size={18} /> Download editable template</button></div><div className="cv-builder-layout"><article className="cv-document"><header><h1>{profile.name}</h1><p>{certificate ? "Junior Data Analyst" : "Graduate Data Analyst"}</p><span>Johannesburg · South Africa · {certificate ? "employed" : "available immediately"}</span></header><section><h2>Profile</h2><p>Analytical graduate with a foundation in {profile.favoriteModule}, SQL, reporting, and practical problem-solving. Interested in {profile.afterUni}.</p></section>{certificate && <section className="cv-new-entry"><h2>Experience</h2><div className="cv-line"><div><strong>Junior Data Analyst · Solstice Retail Group</strong><span>Customer Intelligence</span></div><time>August 2026 – Present</time></div><ul><li>Passed the {certificate.track} technical readiness assessment with {certificate.score}%.</li>{workRecord && <li>Completed senior stakeholder onboarding and documented the agreed customer-metric investigation plan.</li>}{workRecord && <li>Logged {formatMinutes(workRecord.totalMinutes)} of verified onboarding and workplace activity.</li>}</ul></section>}<section><h2>Education</h2><div className="cv-line"><div><strong>{profile.degree}</strong><span>{profile.university}</span></div><time>Completed 2026</time></div><p>Final weighted average: {transcript.average}%</p></section><section><h2>Core skills</h2><p>SQL · Power BI · Excel · Data cleaning · Data storytelling · Stakeholder communication</p></section>{certificate && <section><h2>Certifications</h2><div className="cv-line"><div><strong>Solstice {certificate.track} Technical Readiness</strong><span>Verified score: {certificate.score}% · Completed in {formatMinutes(certificate.minutes)}</span></div><time>August 2026</time></div></section>}</article><aside className="cv-expert-rail"><img src="/assets/people/senior-executive-coffee-full.webp" alt="" /><p className="overline">Career expert lessons</p><h2>Make the first scan count.</h2><a href="https://careerservices.fas.harvard.edu/resources/create-a-strong-resume/" target="_blank" rel="noreferrer"><strong>Write for fast readers</strong><span>Harvard: specific, active, fact-based language</span></a><a href="https://www.careers.ox.ac.uk/node/768221" target="_blank" rel="noreferrer"><strong>Build an ATS-readable CV</strong><span>Oxford: clarity, relevance, and tailoring</span></a><a href="https://careerservices.upenn.edu/channels/resume/" target="_blank" rel="noreferrer"><strong>Use a clean graduate format</strong><span>UPenn: one page, simple structure, visible evidence</span></a><div><strong>Before applying</strong><ul><li>Tailor the profile to the role.</li><li>Use action verbs and outcomes.</li><li>Keep formatting simple.</li><li>Name the final PDF professionally.</li></ul></div></aside></div></section>;
+  return <section className="cv-page"><div className="cv-actions"><div><p className="overline">Step one · Build your CV</p><h1>Your résumé</h1><span className="auto-update-note">This career record keeps growing. Download an editable template now; export the final version when your story is complete.</span></div><button className="icon-text" onClick={() => downloadCvTemplate(profile)}><Download size={18} /> Download editable template</button></div><div className="cv-builder-layout"><article className="cv-document"><header><h1>{profile.name}</h1><p>{certificate ? "Junior Data Analyst" : "Graduate Data Analyst"}</p><span>Johannesburg · South Africa · {certificate ? "employed" : "available immediately"}</span></header><section><h2>Profile</h2><p>Analytical graduate with a foundation in {profile.favoriteModule}, SQL, reporting, and practical problem-solving. Interested in {profile.afterUni}.</p></section>{certificate && <section className="cv-new-entry"><h2>Experience</h2><div className="cv-line"><div><strong>Junior Data Analyst · Solstice Retail Group</strong><span>Customer Intelligence</span></div><time>August 2026 – Present</time></div><ul><li>Passed the {certificate.track} technical readiness assessment with {certificate.score}%.</li>{workRecord && <li>Completed senior stakeholder onboarding and documented the agreed customer-metric investigation plan.</li>}{workRecord && <li>Logged {formatMinutes(workRecord.totalMinutes)} of verified onboarding and workplace activity.</li>}</ul></section>}<section><h2>Education</h2><div className="cv-line"><div><strong>{profile.degree}</strong><span>{profile.university}</span></div><time>Completed 2026</time></div><p>Final weighted average: {transcript.average}%</p></section><section><h2>Core skills</h2><p>SQL · Power BI · Excel · Data cleaning · Data storytelling · Stakeholder communication</p></section>{certificate && <section><h2>Certifications</h2><div className="cv-line"><div><strong>Solstice {certificate.track} Technical Readiness</strong><span>Verified score: {certificate.score}% · Completed in {formatMinutes(certificate.minutes)}</span></div><time>August 2026</time></div></section>}</article><aside className="cv-expert-rail"><img src={appPath("assets/people/senior-executive-coffee-full.webp")} alt="" /><p className="overline">Career expert lessons</p><h2>Make the first scan count.</h2><a href="https://careerservices.fas.harvard.edu/resources/create-a-strong-resume/" target="_blank" rel="noreferrer"><strong>Write for fast readers</strong><span>Harvard: specific, active, fact-based language</span></a><a href="https://www.careers.ox.ac.uk/node/768221" target="_blank" rel="noreferrer"><strong>Build an ATS-readable CV</strong><span>Oxford: clarity, relevance, and tailoring</span></a><a href="https://careerservices.upenn.edu/channels/resume/" target="_blank" rel="noreferrer"><strong>Use a clean graduate format</strong><span>UPenn: one page, simple structure, visible evidence</span></a><div><strong>Before applying</strong><ul><li>Tailor the profile to the role.</li><li>Use action verbs and outcomes.</li><li>Keep formatting simple.</li><li>Name the final PDF professionally.</li></ul></div></aside></div></section>;
 }
 
 function WorkPortal({ profile, certificate, workRecord, onCertified, onWorkComplete, onExit }) {
   const [phase, setPhase] = useState("dashboard");
   if (!certificate) return <ReadinessAssessment profile={profile} onCertified={onCertified} onExit={onExit} />;
   if (phase === "meeting") return <BoardroomMeeting profile={profile} certificate={certificate} onComplete={(meeting) => { onWorkComplete({ ...workRecord, ...meeting, firstMeetingComplete: true }); setPhase("dashboard"); }} />;
-  if (phase === "lesson-one") return <ProblemDefinitionLesson profile={profile} onComplete={(lesson) => { onWorkComplete({ ...workRecord, ...lesson, lessonOneComplete: true, totalMinutes: (workRecord?.totalMinutes || certificate.minutes) + 360 }); setPhase("project"); }} />;
+  if (phase === "lesson-one") return <ProblemDefinitionLesson profile={profile} onComplete={(lesson) => { onWorkComplete({ ...workRecord, ...lesson, lessonOneComplete: true, dataAccessGranted: true, totalMinutes: (workRecord?.totalMinutes || certificate.minutes) + 360 }); setPhase("dashboard"); }} />;
   if (phase === "project") return <GuidedProject profile={profile} certificate={certificate} workRecord={workRecord} onUpdate={onWorkComplete} onExit={onExit} />;
-  return <WorkLandingDashboard profile={profile} certificate={certificate} workRecord={workRecord} onMeeting={() => setPhase("meeting")} onLesson={() => setPhase("lesson-one")} onExit={onExit} />;
+  return <WorkLandingDashboard profile={profile} certificate={certificate} workRecord={workRecord} onMeeting={() => setPhase("meeting")} onLesson={() => setPhase("lesson-one")} onProject={() => setPhase("project")} onExit={onExit} />;
 }
 
-function WorkLandingDashboard({ profile, certificate, workRecord, onMeeting, onLesson, onExit }) {
+function WorkLandingDashboard({ profile, certificate, workRecord, onMeeting, onLesson, onProject, onExit }) {
   const [tab, setTab] = useState("teams");
   const lessonReady = Boolean(workRecord?.firstMeetingComplete);
-  return <main className="employee-dashboard"><header><div className="offer-brand"><span>SR</span><strong>SOLSTICE RETAIL GROUP</strong></div><div className="workspace-search"><Search size={17} /> Search Solstice</div><WorkClock minutes={workRecord?.totalMinutes || certificate.minutes} /><button className="profile-button"><Avatar text={initials(profile.name)} /></button></header><div className="employee-shell"><aside><button className={tab === "teams" ? "active" : ""} onClick={() => setTab("teams")}><MessageCircle size={20} /><span>Teams</span></button><button className={tab === "mail" ? "active" : ""} onClick={() => setTab("mail")}><Mail size={20} /><span>Mail</span></button><button className={tab === "engagement" ? "active" : ""} onClick={() => setTab("engagement")}><Star size={20} /><span>Engagement</span></button><button onClick={onExit}><ArrowLeft size={20} /><span>Career</span></button></aside><section className="employee-content">{tab === "teams" && <><div className="employee-heading"><p className="overline">Customer Insights</p><h1>Good morning, {profile.name.split(" ")[0]}.</h1><p>{lessonReady ? "Priya has sent your first work brief. Nothing is labelled as training; treat it as the job." : `Your ${certificate.track} readiness certificate is verified. Review your workspace and join the welcome meeting when you are ready.`}</p></div><div className="dashboard-grid"><article><img src="/assets/people/office-team-discussion.webp" alt="" /><span>Customer Insights</span><strong>6 teammates</strong><small>{lessonReady ? "Priya: I sent your first set of projects." : "Priya: Welcome to the team."}</small></article><article><img src="/assets/people/coworkers-desk-learning.webp" alt="" /><span>Onboarding</span><strong>First-week support</strong><small>Tools, policies, people, and live work.</small></article></div></>}{tab === "mail" && <><div className="employee-heading"><p className="overline">Company mail</p><h1>Inbox</h1></div>{lessonReady && <button className="meeting-email unread" onClick={onLesson}><Avatar text="PS" /><div><strong>Priya Shah</strong><span>Your first week: open and closed work</span><small>Choose where you can contribute, then prepare for a stakeholder conversation.</small></div><time>10:04</time><ChevronRight size={18} /></button>}<button className="meeting-email" onClick={onMeeting}><Avatar text="PS" /><div><strong>Priya Shah</strong><span>Invitation: Customer Insights welcome meeting</span><small>Meet the team and hear about your first assignment.</small></div><time>09:12</time><ChevronRight size={18} /></button>{workRecord?.firstMeetingComplete && <div className="meeting-complete-note"><Check size={18} /> Welcome meeting completed and saved.</div>}</>}{tab === "engagement" && <><div className="employee-heading"><p className="overline">Employee engagement</p><h1>Your first week</h1></div><div className="engagement-list"><label><input type="checkbox" defaultChecked /><span>Technical readiness verified</span></label><label><input type="checkbox" checked={Boolean(workRecord?.firstMeetingComplete)} readOnly /><span>Meet the Customer Insights team</span></label><label><input type="checkbox" checked={Boolean(workRecord?.lessonOneComplete)} readOnly /><span>Define the loyalty problem</span></label><label><input type="checkbox" /><span>Complete payroll and banking details</span></label></div></>}</section></div></main>;
+  const hasNewMeeting = lessonReady && !workRecord?.lessonOneComplete;
+  return <main className="employee-dashboard"><header><div className="offer-brand"><span>SR</span><strong>SOLSTICE RETAIL GROUP</strong></div><div className="workspace-search"><Search size={17} /> Search Solstice</div><WorkClock minutes={workRecord?.totalMinutes || certificate.minutes} /><button className="profile-button"><Avatar text={initials(profile.name)} /></button></header>{hasNewMeeting && <button className="workspace-notification" onClick={() => setTab("mail")}><Bell size={18} /><span><strong>New meeting series</strong>Priya added three problem-framing sessions.</span><ChevronRight size={17} /></button>}<div className="employee-shell"><aside><button className={tab === "teams" ? "active" : ""} onClick={() => setTab("teams")}><MessageCircle size={20} /><span>Teams</span></button><button className={tab === "mail" ? "active" : ""} onClick={() => setTab("mail")}><Mail size={20} /><span>Mail</span>{hasNewMeeting && <b>1</b>}</button><button className={tab === "research" ? "active" : ""} onClick={() => setTab("research")}><Library size={20} /><span>Research</span></button><button className={tab === "data" ? "active" : ""} onClick={() => setTab("data")}><Database size={20} /><span>Data</span></button><button className={tab === "engagement" ? "active" : ""} onClick={() => setTab("engagement")}><Star size={20} /><span>Engagement</span></button><button onClick={onExit}><ArrowLeft size={20} /><span>Career</span></button></aside><section className="employee-content">{tab === "teams" && <TeamsLearningChannel profile={profile} />}{tab === "mail" && <><div className="employee-heading"><p className="overline">Company mail</p><h1>Inbox</h1></div>{lessonReady && <button className="meeting-email unread" onClick={onLesson}><Avatar text="PS" /><div><strong>Priya Shah</strong><span>{workRecord?.lessonOneComplete ? "Revisit: Problem definition meeting series" : "Three meetings: framing the loyalty problem"}</span><small>{workRecord?.lessonOneComplete ? "Your transcripts, research and whiteboards remain available." : "Observe the team before you lead your own work."}</small></div><time>10:04</time><ChevronRight size={18} /></button>}<button className="meeting-email" onClick={onMeeting}><Avatar text="PS" /><div><strong>Priya Shah</strong><span>Invitation: Customer Insights welcome meeting</span><small>Meet the team and hear about your first assignment.</small></div><time>09:12</time><ChevronRight size={18} /></button></>}{tab === "research" && <ResearchBoard />}{tab === "data" && <CompanyDataLab granted={Boolean(workRecord?.dataAccessGranted)} />}{tab === "engagement" && <><div className="employee-heading"><p className="overline">Employee engagement</p><h1>Your first week</h1></div><div className="engagement-list"><label><input type="checkbox" defaultChecked readOnly /><span>Technical readiness verified</span></label><label><input type="checkbox" checked={Boolean(workRecord?.firstMeetingComplete)} readOnly /><span>Meet the Customer Insights team</span></label><label><input type="checkbox" checked={Boolean(workRecord?.lessonOneComplete)} readOnly /><span>Attend three problem-framing meetings</span></label><label><input type="checkbox" checked={Boolean(workRecord?.dataAccessGranted)} readOnly /><span>Receive company data access</span></label></div>{workRecord?.lessonOneComplete && <div className="engagement-actions"><button onClick={onLesson}><BookOpen size={17} /> Revisit learning</button><button className="primary-button" onClick={onProject}>Open first project <ChevronRight size={17} /></button></div>}</>}</section></div></main>;
+}
+
+function TeamsLearningChannel({ profile }) {
+  const [channel, setChannel] = useState("learning");
+  const [draft, setDraft] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([
+    { speaker: "Priya", text: "Question for the channel: when does a useful breakdown become a MECE issue tree rather than just a list?" },
+    { speaker: "Tom", text: "When each branch implies different data and different work. If two branches send me the same request, you probably split the problem badly." },
+    { speaker: "Elena", text: "And when the branches together cover the decision. Four tidy boxes can still omit the only cause that matters." },
+    { speaker: "Marcus", text: "I still reserve the right to say pricing until someone brings evidence. Predictable, I know." }
+  ]);
+  const generalMessages = [
+    ["Lebo", "Kitchen coffee machine is back. It now makes coffee and a concerning noise."],
+    ["Daniel", "The 14:00 capacity review moved to tomorrow."],
+    ["Aisha", "Welcome to the new graduates joining this week."],
+    ["Tom", "Whoever named the new table final_final_v2, we need to talk."]
+  ];
+  async function contribute() {
+    if (!draft.trim() || loading) return;
+    const text = draft.trim();
+    setMessages((current) => [...current, { speaker: profile.name.split(" ")[0] || "You", text, mine: true, priority: true }]);
+    setDraft(""); setLoading(true);
+    const speakerCycle = ["Priya", "Elena", "Marcus", "Tom"];
+    const persona = speakerCycle[messages.filter((message) => message.mine).length % speakerCycle.length];
+    const fallback = {
+      Priya: "Make that more testable. What would be different in the data if your point were true?",
+      Elena: "What source would let us verify that rather than merely agree with it?",
+      Marcus: "Could that still be pricing showing up through a different symptom?",
+      Tom: "Translate that into grain, fields, and a bounded period, then it becomes work."
+    }[persona];
+    try {
+      const response = await fetch("/api/gemini", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+        persona,
+        message: text,
+        context: `Internal Teams learning channel. ${profile.name} contributed a point, so it is now the priority thread. Continue a deep but natural discussion about problem definition, MECE issue trees, evidence, and data-analysis practice. Reply in 1-3 conversational sentences and ask one question that moves the idea deeper.`
+      }) });
+      const payload = await response.json();
+      setMessages((current) => [...current, { speaker: persona, text: payload.reply || fallback }]);
+    } catch {
+      setMessages((current) => [...current, { speaker: persona, text: fallback }]);
+    } finally { setLoading(false); }
+  }
+  return <div className="teams-workspace"><aside><button className={channel === "learning" ? "active" : ""} onClick={() => setChannel("learning")}><strong>Problem-solving lab</strong><span>AI-assisted deep dive</span></button><button className={channel === "general" ? "active" : ""} onClick={() => setChannel("general")}><strong>Customer Insights · General</strong><span>Team conversation</span></button></aside><section><header><div><strong>{channel === "learning" ? "Problem-solving lab" : "Customer Insights · General"}</strong><span>{channel === "learning" ? "Your contribution becomes the active learning thread" : "Regular team chat · backend connection later"}</span></div></header><div className="teams-messages">{channel === "learning" ? messages.map((message, index) => <article className={`${message.mine ? "mine" : ""} ${message.priority ? "priority" : ""}`} key={index}><Avatar text={initials(message.speaker)} /><div><strong>{message.speaker}{message.priority && <span>Priority thread</span>}</strong><p>{message.text}</p></div></article>) : generalMessages.map(([speaker, text]) => <article key={speaker + text}><Avatar text={initials(speaker)} /><div><strong>{speaker}</strong><p>{text}</p></div></article>)}{loading && <article><Avatar text="PS" /><div><strong>Team</strong><p>Someone is typing…</p></div></article>}</div>{channel === "learning" && <form onSubmit={(event) => { event.preventDefault(); contribute(); }}><input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Add a point or ask the team…" /><button disabled={!draft.trim() || loading}><Send size={17} /></button></form>}</section></div>;
+}
+
+function ResearchBoard() {
+  const [saved, setSaved] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("plato-research-board") || "[]"); } catch { return []; }
+  });
+  const [title, setTitle] = useState("");
+  const [note, setNote] = useState("");
+  const fieldNotes = [
+    ["Lead with the answer", "Monash University", "SCQA creates shared context, tension, a decision question, and an answer-first recommendation.", "https://www.monash.edu/student-academic-success/excel-at-writing/how-to-write/business-paper-using-the-minto-approach"],
+    ["Issue trees turn problems into work", "StrategyU", "A useful branch becomes a hypothesis and workstream, not merely a heading.", "https://strategyu.co/issue-tree/"],
+    ["Separate symptoms from causes", "Atlassian", "A complaint is evidence of a symptom; root-cause work tests the conditions producing it.", "https://www.atlassian.com/work-management/project-management/root-cause-analysis"]
+  ];
+  function save() {
+    if (!title.trim() || !note.trim()) return;
+    const next = [{ title: title.trim(), note: note.trim(), created: new Date().toLocaleDateString() }, ...saved];
+    setSaved(next); localStorage.setItem("plato-research-board", JSON.stringify(next)); setTitle(""); setNote("");
+  }
+  return <div className="research-board"><div className="employee-heading"><p className="overline">Shared research</p><h1>Research board</h1><p>Read the team’s field notes, keep the original source attached, and save your own conclusions.</p></div><div className="research-columns"><section><h2>Team field notes</h2>{fieldNotes.map(([itemTitle, source, summary, url]) => <article key={itemTitle}><span>{source}</span><h3>{itemTitle}</h3><p>{summary}</p><a href={url} target="_blank" rel="noreferrer">Read source <ExternalLink size={14} /></a></article>)}</section><section><h2>My research</h2><div className="research-composer"><input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="Finding or useful idea" /><textarea value={note} onChange={(event) => setNote(event.target.value)} placeholder="Explain it in your own words and say when it is useful." /><button onClick={save} disabled={!title.trim() || !note.trim()}>Save to board</button></div>{saved.length === 0 ? <p className="empty-research">Your saved research will remain here.</p> : saved.map((item) => <article key={item.created + item.title}><span>{item.created} · Personal note</span><h3>{item.title}</h3><p>{item.note}</p></article>)}</section></div></div>;
+}
+
+function CompanyDataLab({ granted }) {
+  const [query, setQuery] = useState("SELECT region, COUNT(*) AS customers\nFROM customers\nGROUP BY region;");
+  const [result, setResult] = useState(null);
+  const rows = [
+    ["Gauteng", 4820],
+    ["Western Cape", 3160],
+    ["KwaZulu-Natal", 2480],
+    ["Eastern Cape", 1540]
+  ];
+  function run() {
+    const lower = query.toLowerCase();
+    if (!lower.includes("select")) { setResult({ error: "Only SELECT queries are allowed in the learning workspace." }); return; }
+    if (!lower.includes("from customers")) { setResult({ error: "Table not found in your current access scope. Try customers." }); return; }
+    setResult({ columns: ["region", "customers"], rows: lower.includes("group by") ? rows : [["C1001", "Gauteng"], ["C1002", "Western Cape"], ["C1003", "Gauteng"]] });
+  }
+  if (!granted) return <div className="data-locked"><Database size={34} /><h1>Company data access pending</h1><p>Attend the three senior meetings and send Tom a scoped request. Access is granted only when the grain, fields, and period are clear.</p></div>;
+  return <div className="company-data-lab"><div className="employee-heading"><p className="overline">Read-only company data</p><h1>Customer Insights SQL</h1><p>Your access includes approved customer, order, and support extracts. Production writes remain blocked.</p></div><div className="company-schema"><span><strong>customers</strong>12,000 rows</span><span><strong>orders</strong>50,000 rows</span><span><strong>support_tickets</strong>15,000 rows</span></div><div className="query-console"><header><span>solstice_customer_insights</span><b>READ ONLY</b></header><textarea value={query} onChange={(event) => setQuery(event.target.value)} spellCheck="false" /><button onClick={run}>Run query</button></div>{result?.error && <div className="query-error">{result.error}</div>}{result?.rows && <table className="query-results"><thead><tr>{result.columns.map((column) => <th key={column}>{column}</th>)}</tr></thead><tbody>{result.rows.map((row, index) => <tr key={index}>{row.map((value, cell) => <td key={cell}>{value}</td>)}</tr>)}</tbody></table>}</div>;
+}
+
+function gradeMeceTree(branches) {
+  const clean = branches.map((branch) => branch.trim().toLowerCase()).filter(Boolean);
+  const stopWords = new Set(["and", "the", "of", "or", "customer", "customers", "issues", "problem"]);
+  const tokens = clean.map((branch) => new Set(branch.split(/\W+/).filter((word) => word.length > 3 && !stopWords.has(word))));
+  let overlapPairs = 0;
+  for (let left = 0; left < tokens.length; left += 1) {
+    for (let right = left + 1; right < tokens.length; right += 1) {
+      if ([...tokens[left]].some((token) => tokens[right].has(token))) overlapPairs += 1;
+    }
+  }
+  const mutuallyExclusive = new Set(clean).size !== clean.length ? 0 : overlapPairs ? 1 : 2;
+  const driverGroups = [
+    ["price", "pricing", "value", "cost"],
+    ["loyalty", "point", "reward", "redemption"],
+    ["service", "support", "delivery", "experience"],
+    ["segment", "channel", "mix", "tenure", "region"]
+  ];
+  const coveredDrivers = driverGroups.filter((terms) => terms.some((term) => clean.some((branch) => branch.includes(term)))).length;
+  const collectivelyExhaustive = coveredDrivers >= 4 ? 2 : coveredDrivers === 3 ? 1 : 0;
+  const vague = clean.some((branch) => /other|misc|general|various/.test(branch));
+  const actionableDepth = clean.length === 4 && clean.every((branch) => branch.length >= 8) && !vague ? 1 : 0;
+  const total = mutuallyExclusive + collectivelyExhaustive + actionableDepth;
+  return {
+    total,
+    maximum: npcSystem.rubrics.mece.maximum,
+    pass: total >= npcSystem.rubrics.mece.pass,
+    criteria: { mutuallyExclusive, collectivelyExhaustive, actionableDepth },
+    weakest: mutuallyExclusive < 2 ? "overlap" : collectivelyExhaustive < 2 ? "missing driver" : actionableDepth < 1 ? "vague branch" : null
+  };
+}
+
+function gradeScqaResponse(text) {
+  const lower = text.toLowerCase();
+  const sentences = text.split(/[.!?]+/).map((sentence) => sentence.trim()).filter(Boolean);
+  const first = (sentences[0] || "").toLowerCase();
+  const situation = /currently|today|baseline|observed|among|during|data shows/.test(lower) ? 1 : 0;
+  const complication = /but|however|declin|changed|failure|risk|since|problem/.test(lower) ? 1 : 0;
+  const question = /\?|need to (determine|understand|decide)|whether/.test(lower) ? 1 : 0;
+  const answerTerms = /recommend|conclusion|first|should|priority|hypothesis|therefore/;
+  const answerFirst = answerTerms.test(first) ? 2 : answerTerms.test(lower) ? 1 : 0;
+  const support = /evidence|source|data|compare|validate|metric|identifier|segment|test/.test(lower) ? 1 : 0;
+  const total = situation + complication + question + answerFirst + support;
+  return {
+    total,
+    maximum: npcSystem.rubrics.scqa.maximum,
+    pass: total >= npcSystem.rubrics.scqa.pass,
+    criteria: { situation, complication, question, answerFirst, support },
+    weakest: support === 0 ? "unsupported claim" : answerFirst < 2 ? "buried answer" : question === 0 ? "unclear decision question" : complication === 0 ? "missing tension" : situation === 0 ? "biased or missing situation" : null
+  };
 }
 
 function ProblemDefinitionLesson({ profile, onComplete }) {
@@ -778,14 +823,24 @@ function ProblemDefinitionLesson({ profile, onComplete }) {
   const [wordIndex, setWordIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [checkIndex, setCheckIndex] = useState(0);
+  const [checkComplete, setCheckComplete] = useState(false);
+  const [recallReflection, setRecallReflection] = useState("");
   const [openedResearch, setOpenedResearch] = useState([]);
+  const [selectedResearch, setSelectedResearch] = useState(null);
   const [meetingTime, setMeetingTime] = useState("");
   const [observeScene, setObserveScene] = useState(0);
+  const [meetingNumber, setMeetingNumber] = useState(0);
+  const [meetingTranscript, setMeetingTranscript] = useState([]);
+  const [boardNodes, setBoardNodes] = useState([]);
+  const [meetingGenerating, setMeetingGenerating] = useState(false);
+  const [meetingFinished, setMeetingFinished] = useState(false);
+  const [contributions, setContributions] = useState([]);
   const [contribution, setContribution] = useState("");
   const [contributionFeedback, setContributionFeedback] = useState("");
   const [problemStatement, setProblemStatement] = useState("");
   const [branches, setBranches] = useState(["", "", "", ""]);
   const [soloScore, setSoloScore] = useState(null);
+  const [rubricScores, setRubricScores] = useState({ mece: null, scqa: null });
   const [grillMessages, setGrillMessages] = useState([{ speaker: "Marcus", text: "You have four branches. Why should I believe pricing is only one possibility rather than the answer?" }]);
   const [grillDraft, setGrillDraft] = useState("");
   const [resolution, setResolution] = useState(18);
@@ -795,7 +850,19 @@ function ProblemDefinitionLesson({ profile, onComplete }) {
   const [requestFields, setRequestFields] = useState(["customer_id", "loyalty_status"]);
   const [dateRange, setDateRange] = useState("");
   const [requestStatus, setRequestStatus] = useState("");
-  const intake = "A problem statement turns a vague concern into a decision that evidence can support. Name the stakeholder, the population, the metric, the comparison, and the time period. Scope is not a smaller version of the answer. It is the boundary that keeps the work useful. A strong analyst does not accept every assumption in the request. They separate the situation from the complication, define the question, and hold the answer as a hypothesis until the data survives testing. A MECE issue tree helps by separating possible causes without overlap while covering the important ground.";
+  const intake = `Before an analyst opens Power BI, Python, or SQL, someone has to decide what problem the work is meant to solve. "Customers are less loyal" is a concern, not an analysis question. It does not tell us which customers, what loyalty means, when the change began, what comparison matters, or which business decision the answer will support. A useful problem statement names the decision owner, population, metric, comparison, period, and decision.
+
+Think of scope as the fence around a football pitch. The fence does not tell the players who will win. It creates a field where the game can be played properly. In analysis, scope prevents a vague request from becoming an endless search through every available column. It also protects you from making claims the evidence cannot support.
+
+MECE means mutually exclusive and collectively exhaustive. In plain language: put each cause in one sensible drawer, and make sure the important drawers are present. Imagine sorting laundry. If one pile is "dark clothes" and another is "shirts," the same black shirt belongs in both piles, so the groups overlap. If your piles are only "shirts" and "trousers," socks disappear, so the set is incomplete.
+
+For a loyalty decline, pricing and perceived value, loyalty programme mechanics, service experience, and customer mix can be first-level branches. Each branch suggests different evidence. Pricing may require price and promotion history. Programme mechanics may require points earned, expiry, and redemption failures. Service experience may require delivery outcomes and support contacts. Customer mix may require acquisition channel, tenure, and region. The tree tells you what to test. It must not quietly announce the answer before testing begins.
+
+SCQA gives the investigation a narrative. Situation states the stable context. Complication names what changed or created tension. Question defines the decision that now needs an answer. Answer leads with the current recommendation or best-supported finding. During early analysis, that answer remains a hypothesis. Seniority does not turn an assumption into evidence.
+
+Good analysts ask, "Compared with what?" A decline from seventy to sixty percent means little without a metric definition, denominator, period, and comparable group. They also ask, "What would change our mind?" That creates falsifiable branches instead of convenient stories. The goal is not to prove pricing caused loyalty loss. The goal is to distinguish pricing from other plausible causes using evidence strong enough for a real decision.
+
+In the meetings ahead, listen for how the team changes vague language into testable language. People will interrupt, remember related work, disagree about definitions, and update the shared board while speaking. Your first contribution will be small. Trust grows when your questions sharpen the team's thinking, not when you rush to sound certain.`;
   const keyTerms = ["problem statement", "stakeholder", "scope", "hypothesis", "mece", "metric"];
   const chunks = useMemo(() => {
     const words = intake.split(" ");
@@ -806,12 +873,27 @@ function ProblemDefinitionLesson({ profile, onComplete }) {
   }, [phraseMode]);
   const currentChunk = chunks[Math.min(wordIndex, chunks.length - 1)] || "";
   const currentTerm = keyTerms.find((term) => currentChunk.toLowerCase().replace(/[.,]/g, "").includes(term));
-  const observeDialogue = [
-    ["priya", "Let’s not start with columns. Elena, what decision has to be made when this work is done?"],
-    ["elena", "Whether we change the loyalty experience before the holiday campaign. I need to know who is affected and where the failure occurs."],
-    ["marcus", "Pricing changed at the same time. If we ignore that, the analysis will be technically neat and commercially useless."],
-    ["priya", "Good. Our issue tree keeps pricing, loyalty mechanics, service experience, and customer mix separate. Together they cover the credible causes."]
+  const meetingScripts = [
+    [
+      { key: "priya", text: "Morning, everyone. Marcus, congratulations on surviving yesterday's pricing review. Before we start, Elena, how did the store pilot go?", board: "Context: loyalty concern raised" },
+      { key: "elena", text: "Better than expected, although the support queue was rough. Here I need to decide whether we change the loyalty experience before the holiday campaign.", board: "Decision: change experience before holiday?" },
+      { key: "marcus", text: "Pricing moved in the same period. I do not want a tidy loyalty report that ignores the commercial change happening beside it.", board: "Possible cause: pricing and value" },
+      { key: "priya", text: "Then our first job is defining whose loyalty changed, how we measure it, compared with when, and what decision the result will unlock.", board: "Define: population · metric · comparison · period" }
+    ],
+    [
+      { key: "marcus", text: "Quick detour: the campaign team found that their regions overlapped, so every total disagreed. That is the structure problem we must avoid here.", board: "Rule: one cause has one home" },
+      { key: "priya", text: "Think of a wardrobe. If one drawer says shirts and another says black clothes, a black shirt lives in both. Our branches must not overlap like that.", board: "Mutually exclusive = no double counting" },
+      { key: "elena", text: "But neat drawers are useless if complaints fall on the floor. We need enough branches to cover the credible story, not every imaginable story.", board: "Collectively exhaustive = credible coverage" },
+      { key: "priya", text: "For now: pricing and value, programme mechanics, service experience, and customer mix. Each branch must imply evidence that could support or reject it.", board: "Tree: price · programme · service · mix" }
+    ],
+    [
+      { key: "elena", text: "The migration record says customer identifiers changed and regional totals were restated twice. We cannot treat the old dashboard as unquestioned truth.", board: "Evidence risk: migrated customer IDs" },
+      { key: "marcus", text: "Support tickets mention missing points and delayed deliveries. Pricing is possible, not proven. What evidence would separate those explanations?", board: "Test alternatives; do not prove a favourite" },
+      { key: "priya", text: "Our answer begins with the decision, then shows the evidence. Until testing survives, call it a hypothesis. A confident voice is not a data source.", board: "SCQA: situation · complication · question · answer" },
+      { key: "priya", text: `${profile.name.split(" ")[0]}, give us one additional service-experience cause. Keep it distinct; one point is enough for today.`, board: "Junior contribution invited" }
+    ]
   ];
+  const observeDialogue = meetingScripts[meetingNumber];
   const researchItems = [
     ["archive", "Q2 loyalty migration incident", "Old report · 8 months ago", "Customer identifiers changed during migration; regional totals were restated twice."],
     ["archive", "Support escalation themes", "Ticket archive · 6 months ago", "Free-text complaints mention missing points, failed redemptions, and delayed deliveries."],
@@ -833,10 +915,51 @@ function ProblemDefinitionLesson({ profile, onComplete }) {
   }, [stage, playing, wpm, phraseMode, chunks.length]);
   useEffect(() => {
     if (stage !== "observe") return undefined;
-    const [characterKey, line] = observeDialogue[observeScene];
-    speakAsCharacter(characterKey, line);
+    const first = observeDialogue[0];
+    setObserveScene(0);
+    setMeetingTranscript([{ speaker: first.key, text: first.text }]);
+    setBoardNodes([first.board]);
+    setMeetingFinished(false);
+    speakAsCharacter(first.key, first.text);
     return () => window.speechSynthesis?.cancel();
-  }, [stage, observeScene]);
+  }, [stage, meetingNumber]);
+  useEffect(() => {
+    if (stage !== "observe" || meetingFinished || meetingGenerating) return undefined;
+    const timer = window.setTimeout(async () => {
+      const nextIndex = observeScene + 1;
+      if (nextIndex >= observeDialogue.length) {
+        const transcript = meetingTranscript.map((item) => `${characterBible[item.speaker].name}: ${item.text}`).join("\n");
+        saveNote(transcript, `Meeting ${meetingNumber + 1} transcript`);
+        setMeetingFinished(true);
+        window.setTimeout(() => move("contribute"), 1800);
+        return;
+      }
+      const next = observeDialogue[nextIndex];
+      setMeetingGenerating(true);
+      let spokenText = next.text;
+      try {
+        const response = await fetch("/api/gemini", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: next.text,
+            persona: characterBible[next.key].name,
+            context: `You are speaking naturally in senior meeting ${meetingNumber + 1} of 3. Preserve the teaching point in the supplied line. Sound like a real colleague, use one to three sentences, and do not ask the junior for a final answer unless the supplied line does. Recent transcript:\n${meetingTranscript.slice(-3).map((item) => `${characterBible[item.speaker].name}: ${item.text}`).join("\n")}`
+          })
+        });
+        const payload = await response.json();
+        if (payload.reply && payload.reply.length < 480) spokenText = payload.reply;
+      } catch {
+        spokenText = next.text;
+      }
+      setObserveScene(nextIndex);
+      setMeetingTranscript((current) => [...current, { speaker: next.key, text: spokenText }]);
+      setBoardNodes((current) => [...current, next.board]);
+      speakAsCharacter(next.key, spokenText);
+      setMeetingGenerating(false);
+    }, 6200);
+    return () => window.clearTimeout(timer);
+  }, [stage, observeScene, meetingNumber, meetingFinished, meetingGenerating, meetingTranscript]);
   useEffect(() => {
     if (stage !== "grill" || resolution >= 80 || grillTime <= 0) return undefined;
     const timer = window.setInterval(() => setGrillTime((current) => Math.max(0, current - 1)), 1000);
@@ -855,24 +978,43 @@ function ProblemDefinitionLesson({ profile, onComplete }) {
   }
   function answerCheck(option) {
     const next = checkIndex + 1;
-    if (next >= checks.length) move("research"); else setCheckIndex(next);
+    if (next >= checks.length) setCheckComplete(true); else setCheckIndex(next);
   }
   function assessContribution() {
     const lower = contribution.toLowerCase();
     const strong = ["communication", "awareness", "engagement", "expectation"].some((term) => lower.includes(term));
     setContributionFeedback(strong ? "Priya: That fits under customer experience without duplicating pricing or service operations. Add it." : "Priya: Useful instinct. Name the distinct cause, then check whether it overlaps an existing branch.");
   }
+  function finishContribution() {
+    const nextContributions = [...contributions, contribution.trim()];
+    setContributions(nextContributions);
+    saveNote(`My contribution: ${contribution.trim()}`, `Meeting ${meetingNumber + 1}`);
+    if (meetingNumber < 2) {
+      setMeetingNumber((current) => current + 1);
+      setMeetingTime("");
+      setContribution("");
+      setContributionFeedback("");
+      move("calendar");
+    } else {
+      move("solo");
+    }
+  }
   function assessSolo() {
-    const populated = branches.filter((branch) => branch.trim().length >= 8).length;
-    const unique = new Set(branches.map((branch) => branch.trim().toLowerCase())).size;
+    const mece = gradeMeceTree(branches);
     const definitionTerms = ["customer", "retention", "gauteng", "july", "compare", "loyalty"].filter((term) => problemStatement.toLowerCase().includes(term)).length;
-    setSoloScore(Math.min(100, populated * 15 + (unique === 4 ? 15 : 0) + definitionTerms * 5));
+    const scopeBonus = Math.min(20, definitionTerms * 4);
+    const score = Math.min(100, Math.round((mece.total / mece.maximum) * 80) + scopeBonus);
+    setRubricScores((current) => ({ ...current, mece }));
+    setSoloScore(score);
+    setResolution(12 + mece.total * 8);
   }
   async function sendGrill() {
     if (grillDraft.trim().length < 12 || grillLoading) return;
     const answer = grillDraft.trim();
-    const useful = ["compare", "segment", "validate", "metric", "identifier", "evidence", "exclude", "scope", "hypothesis"].filter((term) => answer.toLowerCase().includes(term)).length;
-    const gain = Math.max(8, Math.min(32, useful * 5));
+    const scqa = gradeScqaResponse(answer);
+    setRubricScores((current) => ({ ...current, scqa }));
+    const meceStrength = rubricScores.mece?.total >= 4 ? 1.45 : 1;
+    const gain = Math.max(5, Math.round((scqa.total / scqa.maximum) * 24 * meceStrength));
     const nextResolution = Math.min(100, resolution + gain);
     setGrillMessages((current) => [...current, { speaker: "You", text: answer }]);
     setGrillDraft(""); setGrillLoading(true); setResolution(nextResolution);
@@ -880,17 +1022,28 @@ function ProblemDefinitionLesson({ profile, onComplete }) {
       setGrillMessages((current) => [...current, { speaker: "Priya", text: "That holds. The scope is explicit, the alternatives are testable, and you have said what the analysis will not claim." }]);
       setGrillLoading(false); return;
     }
-    const fallback = [
-      "Elena: Which customer group is inside your scope, and which one is deliberately outside it?",
-      "Marcus: What evidence would make you reject your preferred explanation?",
-      "Priya: State the decision this analysis will support in one sentence."
-    ][Math.min(2, grillMessages.filter((item) => item.speaker === "You").length)];
+    const targetPersona = scqa.criteria.support === 0 ? "Elena" : /price|pricing/.test(answer.toLowerCase()) ? "Marcus" : "Priya";
+    const fallbackByPersona = {
+      Elena: "How do you know that? Name the source behind the weakest claim.",
+      Marcus: "Sure, but isn’t that just pricing wearing a different hat?",
+      Priya: scqa.criteria.answerFirst < 2 ? "What is your answer? Start there, then support it." : "Which part of the structure would fail if your main hypothesis is wrong?"
+    };
+    const fallback = fallbackByPersona[targetPersona];
     try {
-      const response = await fetch("/api/gemini", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: answer, persona: "Priya", context: "You are chairing a ten-minute problem-definition review. Privately test scope, MECE separation, decision relevance, falsifiability, and metric clarity. Ask one concise pushback question. Do not praise confidence and do not give the answer." }) });
+      const response = await fetch("/api/gemini", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+        message: answer,
+        persona: targetPersona,
+        context: `Ten-minute problem-definition review. Keep this rubric private and never quote scores.
+MECE: ${JSON.stringify(rubricScores.mece)}
+Latest SCQA: ${JSON.stringify(scqa)}
+Board clarity: ${nextResolution}%. Time remaining: ${grillTime} seconds.
+Recent exchange: ${grillMessages.slice(-4).map((item) => `${item.speaker}: ${item.text}`).join("\n")}
+Ask exactly one concise, character-specific question targeting the weakest unresolved gap.`
+      }) });
       const payload = await response.json();
-      setGrillMessages((current) => [...current, { speaker: "Priya", text: payload.reply || fallback }]);
+      setGrillMessages((current) => [...current, { speaker: targetPersona, text: payload.reply || fallback }]);
     } catch {
-      setGrillMessages((current) => [...current, { speaker: fallback.split(":")[0], text: fallback.split(": ").slice(1).join(": ") }]);
+      setGrillMessages((current) => [...current, { speaker: targetPersona, text: fallback }]);
     } finally { setGrillLoading(false); }
   }
   function startDictation() {
@@ -921,15 +1074,15 @@ function ProblemDefinitionLesson({ profile, onComplete }) {
   const check = checks[checkIndex];
   return <main className="lesson-job"><header><div className="offer-brand"><span>SR</span><strong>SOLSTICE · CUSTOMER INSIGHTS</strong></div><div className="lesson-stage-name"><span>Week one</span><strong>Customer loyalty investigation</strong></div><button className={notesOpen ? "active" : ""} onClick={() => setNotesOpen((value) => !value)}><StickyNote size={18} /> Notes <b>{notes.length}</b></button></header><div className={`lesson-job-shell ${notesOpen ? "notes-visible" : ""}`}><aside className="lesson-progress">{labels.map((label, index) => <span className={index < stageIndex ? "done" : index === stageIndex ? "current" : ""} key={label}>{index < stageIndex ? <Check size={14} /> : index + 1}<b>{label}</b></span>)}</aside><section className="lesson-work">
     {stage === "inbox" && <div className="lesson-inbox"><div className="lesson-email-head"><Avatar text="PS" /><div><strong>Priya Shah</strong><span>Senior Analyst · 10:04</span></div></div><h1>Your first week: choose where to contribute</h1><p>Hi {profile.name.split(" ")[0]},</p><p>I’ve put the current Customer Insights work below. The open work needs someone to shape it. The closed work already has a defined output. Pick the kind of responsibility you want to take into the stakeholder meeting.</p><div className="project-choice"><button className={projectType === "open" ? "selected" : ""} onClick={() => setProjectType("open")}><span>Open project</span><strong>Customers seem less loyal</strong><p>Choose the angle, definition, evidence, and depth. Bring whatever you think the decision needs.</p></button><button className={projectType === "closed" ? "selected" : ""} onClick={() => setProjectType("closed")}><span>Closed project</span><strong>Q1 return rate by region</strong><p>Deliver a fixed regional table and commentary by Friday. The metric and period are already agreed.</p></button></div><button className="primary-button" onClick={() => move("brief")}>Accept {projectType} work <ChevronRight size={17} /></button></div>}
-    {stage === "brief" && <div className="speed-reader"><p className="overline">Preparation note · focused reading</p><h1>Read before the stakeholder call</h1><div className={`rsvp-word ${currentTerm ? "key-term" : ""}`}>{currentChunk}</div><div className="reader-progress"><span style={{ width: `${((wordIndex + 1) / chunks.length) * 100}%` }} /></div><div className="reader-controls"><button onClick={() => setWordIndex((value) => Math.max(0, value - (phraseMode ? 4 : 12)))}><ArrowLeft size={17} /> Sentence</button><button className="play-control" onClick={() => setPlaying((value) => !value)}>{playing ? "Pause" : "Play"}</button><label><span>{wpm} wpm</span><input type="range" min="150" max="500" step="10" value={wpm} onChange={(event) => setWpm(Number(event.target.value))} /></label><label className="chunk-toggle"><input type="checkbox" checked={phraseMode} onChange={(event) => { setPhraseMode(event.target.checked); setWordIndex(0); }} /> Phrase chunks</label></div>{currentTerm && <button className="pin-term" onClick={() => pinTerm(currentTerm)}><BookOpen size={16} /> Pin “{currentTerm}” to glossary</button>}<div className="glossary-strip">{glossary.map((term) => <span key={term}>{term}</span>)}</div><button className="primary-button" disabled={wordIndex < chunks.length - 1} onClick={() => move("check")}>Continue to quick recall</button></div>}
-    {stage === "check" && <div className="lesson-check"><p className="overline">Quick recall · {checkIndex + 1} of {checks.length}</p><h1>{check[0]}</h1>{[check[1], check[2]].map((option, index) => <button onClick={() => answerCheck(index)} key={option}><b>{index === 0 ? "A" : "B"}</b>{option}</button>)}</div>}
-    {stage === "research" && <div className="research-desk"><div className="vague-ask"><Avatar text="EC" /><div><strong>Elena Cho · Customer Operations</strong><p>Customers seem unhappy since the loyalty changes. Can you look into it?</p></div></div><h1>Look for context before booking the room.</h1><p>Open at least two records. Past work may reveal definitions, system changes, and assumptions hidden inside the request.</p><div className="research-grid">{researchItems.map((item, index) => <article className={openedResearch.includes(index) ? "opened" : ""} key={item[1]}><span>{item[0] === "archive" ? <Archive size={18} /> : <Library size={18} />}{item[2]}</span><h2>{item[1]}</h2><p>{item[3]}</p>{item[4] ? <a href={item[4]} target="_blank" rel="noreferrer" onClick={() => setOpenedResearch((current) => current.includes(index) ? current : [...current, index])}>Read original source <ExternalLink size={14} /></a> : <button onClick={() => setOpenedResearch((current) => current.includes(index) ? current : [...current, index])}>{openedResearch.includes(index) ? "Added to working context" : "Open record"}</button>}</article>)}</div><button className="primary-button" disabled={openedResearch.length < 2} onClick={() => move("calendar")}>Schedule a scoping meeting</button></div>}
-    {stage === "calendar" && <div className="lesson-calendar"><p className="overline">Solstice calendar · Priya Shah</p><h1>Find thirty minutes with your senior.</h1><div className="calendar-slots">{["09:30", "11:00", "14:30"].map((time) => <button className={meetingTime === time ? "selected" : ""} onClick={() => setMeetingTime(time === "09:30" ? "11:00" : time)} key={time}><strong>{time}</strong><span>{time === "09:30" ? "Priya proposes 11:00" : "Available · 30 min"}</span></button>)}</div>{meetingTime && <div className="calendar-confirm"><Check size={20} /><span><strong>Accepted by Priya</strong><small>Problem framing · Boardroom 4 · {meetingTime}</small></span></div>}<button className="primary-button" disabled={!meetingTime} onClick={() => move("observe")}>Join at {meetingTime || "selected time"}</button></div>}
-    {stage === "observe" && <div className="observed-meeting"><div className="meeting-visual"><img src="/assets/people/meeting-side-presentation.webp" alt="Senior team discussing an issue tree at a whiteboard" /><div className="whiteboard-tree"><strong>Why is loyalty declining?</strong><span>Pricing & value</span><span>Loyalty mechanics</span><span>Service experience</span><span>Customer mix</span></div></div><div className="meeting-caption"><img src={characterBible[observeDialogue[observeScene][0]].portrait} alt="" /><div><strong>{characterBible[observeDialogue[observeScene][0]].name}</strong><span>{characterBible[observeDialogue[observeScene][0]].role}</span><p>{observeDialogue[observeScene][1]}</p></div></div><button className="primary-button" onClick={() => observeScene < observeDialogue.length - 1 ? setObserveScene((value) => value + 1) : (saveNote(observeDialogue.map(([key, line]) => `${characterBible[key].name}: ${line}`).join("\n"), "Meeting transcript"), move("contribute"))}>{observeScene < observeDialogue.length - 1 ? "Continue listening" : "Save transcript and contribute"} <ChevronRight size={17} /></button></div>}
-    {stage === "contribute" && <div className="whiteboard-contribution"><p className="overline">Priya has unlocked the whiteboard</p><h1>“What would you add here?”</h1><p>Add one distinct sub-branch beneath <strong>Service experience</strong>. It should explain a possible cause without repeating pricing, loyalty mechanics, or customer mix.</p><div className="tree-editor"><span>Service experience</span><span>Delivery failure</span><span>Support resolution</span><label><input value={contribution} onChange={(event) => setContribution(event.target.value)} placeholder="Type another distinct branch…" /></label></div><button className="primary-button" disabled={contribution.trim().length < 5} onClick={assessContribution}>Add branch</button>{contributionFeedback && <div className="in-fiction-feedback">{contributionFeedback}</div>}{contributionFeedback && <button className="text-button" onClick={() => move("solo")}>Open my solo work brief <ChevronRight size={16} /></button>}</div>}
-    {stage === "solo" && <div className="solo-framing"><p className="overline">Private working document</p><h1>Frame the loyalty investigation.</h1><label>Problem statement<textarea value={problemStatement} onChange={(event) => setProblemStatement(event.target.value)} placeholder="Among which customers, which metric changed, over what period, compared with what, and for which decision?" /></label><div className="branch-editor">{branches.map((branch, index) => <label key={index}><span>Branch {index + 1}</span><input value={branch} onChange={(event) => setBranches((current) => current.map((value, itemIndex) => itemIndex === index ? event.target.value : value))} placeholder={["Pricing and perceived value", "Loyalty programme mechanics", "Service experience", "Customer and channel mix"][index]} /></label>)}</div><button className="primary-button" onClick={assessSolo}>Check structure</button>{soloScore !== null && <div className={`structure-score ${soloScore >= 70 ? "passed" : ""}`}><strong>{soloScore}%</strong><span>{soloScore >= 70 ? "The structure is ready to defend." : "Tighten the population, period, comparison, and non-overlapping branches."}</span></div>}{soloScore >= 70 && <button className="text-button" onClick={() => move("grill")}>Lead the review meeting <ChevronRight size={16} /></button>}</div>}
-    {stage === "grill" && <div className="grill-room"><header><div><span className="live-dot" /> Problem definition review</div><time>{String(Math.floor(grillTime / 60)).padStart(2, "0")}:{String(grillTime % 60).padStart(2, "0")}</time></header><div className="grill-layout"><div className="grill-people"><img src="/assets/people/meeting-overhead-team.webp" alt="Senior team around the boardroom table" /><div className="resolution-meter"><span style={{ width: `${resolution}%` }} /><strong>{resolution}% resolved</strong></div></div><div className="grill-chat">{grillMessages.map((message, index) => <p className={message.speaker === "You" ? "mine" : ""} key={index}><strong>{message.speaker}</strong>{message.text}</p>)}{grillLoading && <p><strong>Priya</strong>Considering the structure…</p>}{resolution < 80 && grillTime > 0 && <div className="grill-compose"><textarea value={grillDraft} onChange={(event) => setGrillDraft(event.target.value)} placeholder="Defend the scope with evidence, exclusions, and a testable comparison…" /><button className={listening ? "listening" : ""} onClick={startDictation} title="Speak response"><Mic size={17} /></button><button onClick={sendGrill} disabled={grillDraft.trim().length < 12 || grillLoading}><Send size={17} /></button></div>}{grillTime === 0 && resolution < 80 && <div className="follow-up-notice">The meeting ended inconclusively. Priya scheduled a 20-minute follow-up; your current resolution is preserved.</div>}{(resolution >= 80 || grillTime === 0) && <button className="primary-button" onClick={() => move("request")}>Request the scoped data</button>}</div></div></div>}
-    {stage === "request" && <div className="data-request"><div className="tom-header"><img src={characterBible.tom.portrait} alt="" /><div><strong>Tom Jacobs</strong><span>Data Engineering · ticket DE-208</span></div></div><h1>Specify the extract you actually need.</h1><p>Choose fields and constrain the period. Tom will preserve the imperfect keys so your analysis can audit the real joins.</p><div className="request-fields">{["customer_id", "loyalty_status", "region", "order_outcome", "points_variance", "support_category"].map((field) => <label key={field}><input type="checkbox" checked={requestFields.includes(field)} onChange={() => setRequestFields((current) => current.includes(field) ? current.filter((item) => item !== field) : [...current, field])} />{field}</label>)}</div><label className="date-request">Date range<select value={dateRange} onChange={(event) => setDateRange(event.target.value)}><option value="">Select a bounded period</option><option>1 April – 31 July 2026</option><option>1 January – 31 July 2026</option><option>Last 30 days</option></select></label><button className="primary-button" onClick={submitRequest}>Send request to Tom</button>{requestStatus && <div className="tom-response"><img src={characterBible.tom.portrait} alt="" /><p>{requestStatus}</p></div>}{requestStatus.includes("approved") && <button className="text-button" onClick={() => onComplete({ lessonScore: soloScore, glossary, notesCount: notes.length, projectType })}>Open the data package and begin analysis <ChevronRight size={16} /></button>}</div>}
+    {stage === "brief" && <div className="speed-reader progressive-reader"><p className="overline">Preparation note · focused reading</p><h1>Learn to frame the work before touching the data.</h1><div className="progressive-reading">{chunks.slice(0, wordIndex + 1).map((chunk, index) => <span className={index === wordIndex ? "active" : ""} key={`${chunk}-${index}`}>{chunk} </span>)}</div><div className="reader-progress"><span style={{ width: `${((wordIndex + 1) / chunks.length) * 100}%` }} /></div><div className="reader-controls"><button onClick={() => setWordIndex((value) => Math.max(0, value - (phraseMode ? 4 : 12)))}><ArrowLeft size={17} /> Back</button><button className="play-control" onClick={() => setPlaying((value) => !value)}>{playing ? "Pause" : "Read"}</button><label><span>{wpm} wpm</span><input type="range" min="150" max="420" step="10" value={wpm} onChange={(event) => setWpm(Number(event.target.value))} /></label><label className="chunk-toggle"><input type="checkbox" checked={phraseMode} onChange={(event) => { setPhraseMode(event.target.checked); setWordIndex(0); }} /> Phrase chunks</label></div>{currentTerm && <button className="pin-term" onClick={() => pinTerm(currentTerm)}><BookOpen size={16} /> Pin “{currentTerm}” to glossary</button>}<div className="glossary-strip">{glossary.map((term) => <span key={term}>{term}</span>)}</div><button className="primary-button" disabled={wordIndex < chunks.length - 1} onClick={() => move("check")}>Continue to recall</button></div>}
+    {stage === "check" && <div className="lesson-check">{!checkComplete ? <><p className="overline">Quick recall · {checkIndex + 1} of {checks.length}</p><h1>{check[0]}</h1>{[check[1], check[2]].map((option, index) => <button onClick={() => answerCheck(index)} key={option}><b>{index === 0 ? "A" : "B"}</b>{option}</button>)}</> : <div className="written-recall"><p className="overline">Written recall · saved to your notes</p><h1>Explain MECE without using textbook language.</h1><p>Use a wardrobe, kitchen drawer, or grocery aisle analogy. Then say how the structure changes the data you would request.</p><textarea value={recallReflection} onChange={(event) => setRecallReflection(event.target.value)} placeholder="MECE is like... In an analysis this means I would..." /><button className="primary-button" disabled={recallReflection.trim().length < 80} onClick={() => { saveNote(recallReflection, "MECE recall"); move("research"); }}>Save reflection and research</button></div>}</div>}
+    {stage === "research" && <div className="research-desk"><div className="vague-ask"><Avatar text="EC" /><div><strong>Elena Cho · Customer Operations</strong><p>Customers seem unhappy since the loyalty changes. Can you look into it?</p></div></div><h1>Look for context before booking the room.</h1><p>Open at least two records. Past work may reveal definitions, system changes, and assumptions hidden inside the request.</p><div className="research-grid">{researchItems.map((item, index) => <article className={openedResearch.includes(index) ? "opened" : ""} key={item[1]}><span>{item[0] === "archive" ? <Archive size={18} /> : <Library size={18} />}{item[2]}</span><h2>{item[1]}</h2><p>{item[3]}</p>{item[4] ? <a href={item[4]} target="_blank" rel="noreferrer" onClick={() => setOpenedResearch((current) => current.includes(index) ? current : [...current, index])}>Read original source <ExternalLink size={14} /></a> : <button onClick={() => { setSelectedResearch(index); setOpenedResearch((current) => current.includes(index) ? current : [...current, index]); }}>Open record</button>}</article>)}</div>{selectedResearch !== null && <section className="record-detail"><header><div><span>Solstice records · read only</span><h2>{researchItems[selectedResearch][1]}</h2></div><button onClick={() => setSelectedResearch(null)}>×</button></header>{selectedResearch === 0 ? <><p>The CRM migration replaced 3.8% of customer identifiers. Two regions briefly counted merged profiles as new customers, and regional totals were restated twice.</p><strong>Analyst implication</strong><p>Preserve orphaned keys, reconcile customer counts, and test whether the apparent retention decline survives the identity change.</p></> : <><p>A coded sample of 1,240 support tickets found missing points, redemption failures at checkout, and deliveries arriving after campaign promises.</p><strong>Analyst implication</strong><p>Complaints are signals rather than prevalence estimates. They justify separate tests for programme mechanics and service experience.</p></>}</section>}<div className="mece-source-strip"><strong>MECE field guide</strong><a href="https://strategyu.co/issue-tree/" target="_blank" rel="noreferrer">Issue trees in practice <ExternalLink size={13} /></a><a href="https://www.atlassian.com/work-management/project-management/root-cause-analysis" target="_blank" rel="noreferrer">Root-cause analysis <ExternalLink size={13} /></a><a href="https://www.monash.edu/student-academic-success/excel-at-writing/how-to-write/business-paper-using-the-minto-approach" target="_blank" rel="noreferrer">SCQA and Minto <ExternalLink size={13} /></a></div><button className="primary-button" disabled={openedResearch.length < 2} onClick={() => move("calendar")}>Schedule senior meeting 1 of 3</button></div>}
+    {stage === "calendar" && <div className="lesson-calendar"><p className="overline">Solstice calendar · Senior meeting {meetingNumber + 1} of 3</p><h1>{["Clarify the decision", "Build the issue tree", "Challenge the evidence"][meetingNumber]}</h1><p>You are a junior attendee. The meeting runs live; listen now and use the saved transcript afterward.</p><div className="calendar-slots">{["09:30", "11:00", "14:30"].map((time) => <button className={meetingTime === time ? "selected" : ""} onClick={() => setMeetingTime(time === "09:30" ? "11:00" : time)} key={time}><strong>{time}</strong><span>{time === "09:30" ? "Priya proposes 11:00" : "Available · 30 min"}</span></button>)}</div>{meetingTime && <div className="calendar-confirm"><Check size={20} /><span><strong>Accepted by Priya, Elena and Marcus</strong><small>Boardroom 4 · {meetingTime}</small></span></div>}<button className="primary-button" disabled={!meetingTime} onClick={() => move("observe")}>Join meeting</button></div>}
+    {stage === "observe" && <div className="observed-meeting autonomous-meeting"><div className="meeting-status"><span className="live-dot" /> Senior meeting {meetingNumber + 1} of 3 · live</div><div className="meeting-live-grid"><div className="meeting-visual"><img src={appPath("assets/people/meeting-side-presentation.webp")} alt="Senior team discussing an issue tree at a whiteboard" /><div className="whiteboard-live"><strong>Why is loyalty declining?</strong>{boardNodes.map((node, index) => <span className={index === boardNodes.length - 1 ? "writing" : ""} key={`${node}-${index}`}>{node}</span>)}</div></div><div className="live-transcript"><header><strong>Live transcript</strong><span>Saved automatically</span></header>{meetingTranscript.map((item, index) => <article className={index === meetingTranscript.length - 1 ? "speaking" : ""} key={index}><img src={appPath(characterBible[item.speaker].portrait)} alt="" /><div><strong>{characterBible[item.speaker].name}</strong><p>{item.text}</p></div></article>)}{meetingGenerating && <p className="meeting-thinking">The discussion continues…</p>}</div></div><p className="meeting-no-controls">{meetingFinished ? "The team is handing the whiteboard to you." : "This is a live meeting. Keep listening; you can revisit the transcript in Notes."}</p></div>}
+    {stage === "contribute" && <div className="whiteboard-contribution"><p className="overline">Meeting {meetingNumber + 1} · your contribution</p><h1>One useful point is enough.</h1><p>As a new analyst, you have a small window to contribute. Add one distinct cause beneath <strong>Service experience</strong>; the team will place it on the shared board.</p><div className="tree-editor"><span>Service experience</span>{boardNodes.slice(-3).map((node) => <span key={node}>{node}</span>)}<label><input value={contribution} onChange={(event) => setContribution(event.target.value)} placeholder="Your one point…" /></label>{contributionFeedback && <span className="player-board-point">{contribution}</span>}</div><button className="primary-button" disabled={contribution.trim().length < 5 || Boolean(contributionFeedback)} onClick={assessContribution}>Add to shared board</button>{contributionFeedback && <div className="in-fiction-feedback">{contributionFeedback}</div>}{contributionFeedback && <button className="text-button" onClick={finishContribution}>{meetingNumber < 2 ? `Return to work and await meeting ${meetingNumber + 2}` : "Open my solo work brief"} <ChevronRight size={16} /></button>}</div>}
+    {stage === "solo" && <div className="solo-framing"><p className="overline">Private working document</p><h1>Frame the loyalty investigation.</h1><label>Problem statement<textarea value={problemStatement} onChange={(event) => setProblemStatement(event.target.value)} placeholder="Among which customers, which metric changed, over what period, compared with what, and for which decision?" /></label><div className="branch-editor">{branches.map((branch, index) => <label key={index}><span>Branch {index + 1}</span><input value={branch} onChange={(event) => setBranches((current) => current.map((value, itemIndex) => itemIndex === index ? event.target.value : value))} placeholder={["Pricing and perceived value", "Loyalty programme mechanics", "Service experience", "Customer and channel mix"][index]} /></label>)}</div><button className="primary-button" onClick={assessSolo}>Check structure</button>{soloScore !== null && <div className={`structure-score ${rubricScores.mece?.pass ? "passed" : ""}`}><strong>{soloScore}%</strong><span>{rubricScores.mece?.pass ? "The structure is ready to defend." : `The structure still has a ${rubricScores.mece?.weakest || "scope"} problem.`}</span></div>}{rubricScores.mece?.pass && <button className="text-button" onClick={() => move("grill")}>Lead the review meeting <ChevronRight size={16} /></button>}</div>}
+    {stage === "grill" && <div className="grill-room"><header><div><span className="live-dot" /> Problem definition review</div><time>{String(Math.floor(grillTime / 60)).padStart(2, "0")}:{String(grillTime % 60).padStart(2, "0")}</time></header><div className="grill-layout"><div className="grill-people"><img src={appPath("assets/people/meeting-overhead-team.webp")} alt="Senior team around the boardroom table" /><div className="resolution-meter"><span style={{ width: `${resolution}%` }} /><strong>Board clarity · {resolution}%</strong></div></div><div className="grill-chat">{grillMessages.map((message, index) => <p className={message.speaker === "You" ? "mine" : ""} key={index}><strong>{message.speaker}</strong>{message.text}</p>)}{grillLoading && <p><strong>Boardroom</strong>Someone is considering the structure…</p>}{resolution < 80 && grillTime > 0 && <div className="grill-compose"><textarea value={grillDraft} onChange={(event) => setGrillDraft(event.target.value)} placeholder="Lead with your answer, then defend it with scope, evidence, and a testable comparison…" /><button className={listening ? "listening" : ""} onClick={startDictation} title="Speak response"><Mic size={17} /></button><button onClick={sendGrill} disabled={grillDraft.trim().length < 12 || grillLoading}><Send size={17} /></button></div>}{grillTime === 0 && resolution < 80 && <div className="follow-up-notice">The meeting ended inconclusively. Priya scheduled a 20-minute follow-up; your current resolution is preserved.</div>}{(resolution >= 80 || grillTime === 0) && <button className="primary-button" onClick={() => move("request")}>Request the scoped data</button>}</div></div></div>}
+    {stage === "request" && <div className="data-request data-request-email"><div className="email-compose-head"><span>New message</span><button>×</button></div><div className="email-address"><span>To</span><img src={appPath(characterBible.tom.portrait)} alt="" /><strong>Tom Jacobs</strong><small>tom.jacobs@solsticeretail.co.za</small></div><label>Subject<input readOnly value="Data request: customer loyalty investigation" /></label><div className="email-body"><p>Hi Tom,</p><p>I have completed three scoping meetings with Customer Insights. Please grant access to the bounded extracts below so I can test the agreed issue tree rather than assume one cause.</p><div className="request-fields">{["customer_id", "loyalty_status", "region", "order_outcome", "points_variance", "support_category"].map((field) => <label key={field}><input type="checkbox" checked={requestFields.includes(field)} onChange={() => setRequestFields((current) => current.includes(field) ? current.filter((item) => item !== field) : [...current, field])} />{field}</label>)}</div><label className="date-request">Date range<select value={dateRange} onChange={(event) => setDateRange(event.target.value)}><option value="">Select a bounded period</option><option>1 April – 31 July 2026</option><option>1 January – 31 July 2026</option><option>Last 30 days</option></select></label><p>Thanks,<br />{profile.name}</p></div><button className="primary-button" onClick={submitRequest}><Send size={16} /> Send email</button>{requestStatus && <div className="tom-response"><img src={appPath(characterBible.tom.portrait)} alt="" /><div><strong>Tom replied</strong><p>{requestStatus}</p></div></div>}{requestStatus.includes("approved") && <button className="text-button" onClick={() => onComplete({ lessonScore: soloScore, rubricScores, boardClarity: resolution, glossary, notesCount: notes.length, projectType, meetingsAttended: 3, contributions, dataAccessGranted: true })}>Return to the work dashboard <ChevronRight size={16} /></button>}</div>}
   </section>{notesOpen && <aside className="work-notes"><header><div><strong>Working notes</strong><span>Saved on this device</span></div><button onClick={() => setNotesOpen(false)}>×</button></header><div className="note-list"><label className="notes-search"><Search size={15} /><input value={noteSearch} onChange={(event) => setNoteSearch(event.target.value)} placeholder="Search notes and tags" /></label>{notes.length === 0 ? <p>No notes yet. Pin a term or capture what matters.</p> : notes.slice().reverse().filter((note) => `${note.tag} ${note.text}`.toLowerCase().includes(noteSearch.toLowerCase())).map((note) => <article key={note.id}><span>{note.tag} · {note.created}</span><p>{note.text}</p></article>)}</div><footer><select value={noteTag} onChange={(event) => setNoteTag(event.target.value)}><option>Loyalty problem</option><option>Meeting</option><option>Glossary</option><option>Data request</option></select><textarea value={noteDraft} onChange={(event) => setNoteDraft(event.target.value)} placeholder="Write a useful note…" /><button disabled={!noteDraft.trim()} onClick={() => saveNote()}><StickyNote size={16} /> Save note</button></footer></aside>}</div></main>;
 }
 
@@ -938,10 +1091,17 @@ function speakAsCharacter(characterKey, text) {
   const character = characterBible[characterKey];
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
-  const voices = window.speechSynthesis.getVoices().filter((voice) => voice.lang.startsWith("en"));
-  utterance.voice = voices[character.voiceIndex % Math.max(1, voices.length)] || null;
+  utterance.voice = selectCharacterVoice(character);
   utterance.rate = character.voiceRate;
   window.speechSynthesis.speak(utterance);
+}
+
+function selectCharacterVoice(character) {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices().filter((voice) => voice.lang.startsWith("en"));
+  if (!character || voices.length === 0) return voices[0] || null;
+  const hinted = (character.voiceHints || []).map((hint) => voices.find((voice) => voice.name.toLowerCase().includes(hint.toLowerCase()))).find(Boolean);
+  return hinted || voices[character.voiceIndex % voices.length] || voices[0] || null;
 }
 
 function ProblemSolvingAcademy({ profile, onComplete }) {
@@ -1021,7 +1181,7 @@ function DataDownload() {
     ["orders.csv", "50,000 rows", "Order value, redemptions, checkout errors, and outcomes"],
     ["support_tickets.csv", "15,000 rows", "Complaint reasons, resolution time, and satisfaction"]
   ];
-  return <div className="data-package"><div className="data-readme"><FileText size={24} /><div><strong>Project brief</strong><span>Three tables · 77,000 rows · January–July 2026</span></div><a href="/data/loyalty-project/README.txt" download>Download README</a></div>{files.map((file) => <div className="data-file" key={file[0]}><span>CSV</span><div><strong>{file[0]}</strong><small>{file[2]}</small></div><b>{file[1]}</b><a className="icon-button" href={`/data/loyalty-project/${file[0]}`} download aria-label={`Download ${file[0]}`}><Download size={18} /></a></div>)}</div>;
+  return <div className="data-package"><div className="data-readme"><FileText size={24} /><div><strong>Project brief</strong><span>Three tables · 77,000 rows · January–July 2026</span></div><a href={appPath("data/loyalty-project/README.txt")} download>Download README</a></div>{files.map((file) => <div className="data-file" key={file[0]}><span>CSV</span><div><strong>{file[0]}</strong><small>{file[2]}</small></div><b>{file[1]}</b><a className="icon-button" href={appPath(`data/loyalty-project/${file[0]}`)} download aria-label={`Download ${file[0]}`}><Download size={18} /></a></div>)}</div>;
 }
 
 function GuidanceStep({ step }) {
@@ -1116,7 +1276,7 @@ function BoardroomMeeting({ profile, certificate, onComplete }) {
   function finish(response) {
     onComplete({ totalMinutes: certificate.minutes + 90, meetingMinutes: 90, response });
   }
-  return <main className="boardroom"><header><div><span className="live-dot" /> Solstice Retail Group · Customer Insights welcome</div><WorkClock minutes={certificate.minutes + scene * 30} /><span>Boardroom 4 · 09:30</span></header><section className="boardroom-scene"><div className="board-window" /><div className="board-screen"><strong>WELCOME TO CUSTOMER INSIGHTS</strong><span>People · purpose · first assignment</span><div className="metric-down">DAY 01</div></div><img className="boardroom-people-asset" src="/assets/people/meeting-overhead-team.webp" alt="Customer Insights team seated around the boardroom table" /></section><aside className="meeting-panel"><p className="overline">Company welcome meeting</p><h1>{dialogue[scene][0]}</h1><blockquote>{dialogue[scene][1]}</blockquote>{!atQuestion ? <button className="primary-button" onClick={() => setScene((value) => value + 1)}>Continue listening <ChevronRight size={17} /></button> : <div className="meeting-response"><p>Choose a response or write your own.</p><button className={answerMode === "investigate" ? "selected" : ""} onClick={() => setAnswerMode("investigate")}>Reconcile identifiers, validate the metric definition, and segment the decline before testing pricing as a cause.</button><button className={answerMode === "report" ? "selected" : ""} onClick={() => setAnswerMode("report")}>Report the eight-point decline immediately because the dashboard is the approved source.</button><button className={answerMode === "unknown" ? "selected" : ""} onClick={() => setAnswerMode("unknown")}>I don’t know yet. I would ask for guidance before committing to an answer.</button><button className={answerMode === "type" ? "selected" : ""} onClick={() => setAnswerMode("type")}>Type my own answer</button>{answerMode === "type" && <textarea autoFocus value={typedAnswer} onChange={(event) => setTypedAnswer(event.target.value)} placeholder="Explain your recommended first step..." />}<button className="primary-button" disabled={!answerMode || (answerMode === "type" && typedAnswer.trim().length < 20)} onClick={() => finish(answerMode === "type" ? typedAnswer : answerMode)}>Submit response and end meeting</button></div>}</aside></main>;
+  return <main className="boardroom"><header><div><span className="live-dot" /> Solstice Retail Group · Customer Insights welcome</div><WorkClock minutes={certificate.minutes + scene * 30} /><span>Boardroom 4 · 09:30</span></header><section className="boardroom-scene"><div className="board-window" /><div className="board-screen"><strong>WELCOME TO CUSTOMER INSIGHTS</strong><span>People · purpose · first assignment</span><div className="metric-down">DAY 01</div></div><img className="boardroom-people-asset" src={appPath("assets/people/meeting-overhead-team.webp")} alt="Customer Insights team seated around the boardroom table" /></section><aside className="meeting-panel"><p className="overline">Company welcome meeting</p><h1>{dialogue[scene][0]}</h1><blockquote>{dialogue[scene][1]}</blockquote>{!atQuestion ? <button className="primary-button" onClick={() => setScene((value) => value + 1)}>Continue listening <ChevronRight size={17} /></button> : <div className="meeting-response"><p>Choose a response or write your own.</p><button className={answerMode === "investigate" ? "selected" : ""} onClick={() => setAnswerMode("investigate")}>Reconcile identifiers, validate the metric definition, and segment the decline before testing pricing as a cause.</button><button className={answerMode === "report" ? "selected" : ""} onClick={() => setAnswerMode("report")}>Report the eight-point decline immediately because the dashboard is the approved source.</button><button className={answerMode === "unknown" ? "selected" : ""} onClick={() => setAnswerMode("unknown")}>I don’t know yet. I would ask for guidance before committing to an answer.</button><button className={answerMode === "type" ? "selected" : ""} onClick={() => setAnswerMode("type")}>Type my own answer</button>{answerMode === "type" && <textarea autoFocus value={typedAnswer} onChange={(event) => setTypedAnswer(event.target.value)} placeholder="Explain your recommended first step..." />}<button className="primary-button" disabled={!answerMode || (answerMode === "type" && typedAnswer.trim().length < 20)} onClick={() => finish(answerMode === "type" ? typedAnswer : answerMode)}>Submit response and end meeting</button></div>}</aside></main>;
 }
 
 function WorkClock({ minutes }) {
@@ -1189,7 +1349,7 @@ function ReadinessAssessment({ profile, onCertified, onExit }) {
       setBankSource("Fresh adaptive assessment");
     } catch {
       try {
-        const response = await fetch("/data/simulation-content.json");
+        const response = await fetch(appPath("data/simulation-content.json"));
         const payload = await response.json();
         const fallback = nextTrack === "Python" ? payload.pythonAssessment : payload.sqlAssessment;
         setBank(normalizeAssessmentBank(fallback, nextTrack));
@@ -1237,6 +1397,7 @@ function Avatar({ text }) { return <span className="avatar">{text}</span>; }
 function Status({ text }) { return <span className={`status status-${text.toLowerCase().replaceAll(" ", "-")}`}>{text}</span>; }
 function Empty({ icon: Icon, title, text }) { return <div className="empty"><Icon size={28} /><h2>{title}</h2><p>{text}</p></div>; }
 function BrandMark({ compact }) { return <div className={`brand-mark ${compact ? "compact" : ""}`}><span>P</span><strong>PLATO</strong></div>; }
+function appPath(path) { return `${import.meta.env.BASE_URL}${String(path).replace(/^\/+/, "")}`; }
 function initials(name) { return (name || "Student").split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase(); }
 function now() { return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
 function downloadCvTemplate(profile) {

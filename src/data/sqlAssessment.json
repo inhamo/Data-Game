@@ -1,0 +1,22 @@
+[
+  ["Which clause filters rows before grouping?", "WHERE", "HAVING", 0],
+  ["Which clause filters aggregated groups?", "WHERE", "HAVING", 1],
+  ["Which join keeps every row from the left table?", "LEFT JOIN", "INNER JOIN", 0],
+  ["Which function counts non-null values in a column?", "COUNT(column)", "SUM(column)", 0],
+  ["What does DISTINCT do?", "Removes duplicate result rows", "Sorts result rows", 0],
+  ["Which expression replaces a null value?", "COALESCE(value, 0)", "COUNT(value, 0)", 0],
+  ["Which keyword sorts from highest to lowest?", "ASC", "DESC", 1],
+  ["Which window function gives a unique sequence within a group?", "ROW_NUMBER()", "ROUND()", 0],
+  ["A primary key must be...", "Unique and non-null", "Repeated and nullable", 0],
+  ["Which operator tests a range inclusively?", "BETWEEN", "LIKE", 0],
+  ["Which pattern finds names starting with A?", "LIKE 'A%'", "LIKE '%A'", 0],
+  ["What does GROUP BY do?", "Combines rows sharing values for aggregation", "Deletes repeated rows", 0],
+  ["Which statement adds rows to a table?", "INSERT", "UPDATE", 0],
+  ["Which statement changes existing rows?", "UPDATE", "ALTER", 0],
+  ["What is the safest way to test an UPDATE?", "Run its WHERE logic as a SELECT first", "Remove the WHERE clause", 0],
+  ["Which function returns the average?", "AVG()", "MEAN()", 0],
+  ["A foreign key primarily...", "Links related tables", "Sorts a table", 0],
+  ["UNION differs from UNION ALL because UNION...", "Removes duplicates", "Keeps all duplicates", 0],
+  ["Which clause limits grouped duplicate emails?", "HAVING COUNT(*) > 1", "WHERE COUNT(*) > 1", 0],
+  ["Why use a transaction?", "To commit or roll back a set of changes", "To rename every column", 0]
+]
