@@ -1,0 +1,19 @@
+{
+  "companies": [
+    {
+      "id": "aurora",
+      "name": "Solstice Retail Group",
+      "jobs": ["Junior Data Analyst"]
+    },
+    {
+      "id": "mosaic",
+      "name": "Mosaic Health",
+      "jobs": ["Graduate BI Analyst"]
+    },
+    {
+      "id": "northstar",
+      "name": "Northstar Retail",
+      "jobs": ["Data Graduate"]
+    }
+  ]
+}

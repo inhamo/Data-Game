@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Simulator – Graduate Storyline</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    body {
+      background: #0a0f1c;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #e0e6f0;
+      overflow-x: hidden;
+    }
+    .game-container {
+      width: 100%;
+      max-width: 800px;
+      background: linear-gradient(145deg, #131a2c, #0b1120);
+      border-radius: 2rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 0 2px rgba(255,255,255,0.08);
+      position: relative;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 2rem;
+    }
+    .scene {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .scene.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .grad-cap {
+      font-size: 5rem;
+      animation: float 3s ease-in-out infinite;
+      margin-bottom: 1rem;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    .btn {
+      background: linear-gradient(135deg, #6c63ff, #3f37c9);
+      border: none;
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(108,99,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 1.5rem;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(108,99,255,0.5);
+    }
+    .btn.secondary {
+      background: rgba(255,255,255,0.08);
+      box-shadow: none;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .coach-bubble {
+      background: rgba(255,255,255,0.08);
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.8rem;
+      font-style: italic;
+      position: relative;
+      max-width: 400px;
+      margin: 1.5rem 0;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      line-height: 1.6;
+    }
+    .coach-bubble::before {
+      content: "🧑‍🏫 Career Coach";
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #a5b4fc;
+    }
+    .cv-panel, .job-board {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .skill-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .skill-label {
+      width: 140px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .skill-bar {
+      height: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .skill-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #6c63ff, #a78bfa);
+      border-radius: 20px;
+      transition: width 1s ease;
+    }
+    .avatar-selector {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+    .avatar-option {
+      font-size: 2.5rem;
+      padding: 0.6rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .avatar-option.selected {
+      border-color: #6c63ff;
+      background: rgba(108,99,255,0.2);
+    }
+    .job-card {
+      background: rgba(255,255,255,0.06);
+      border-radius: 1.2rem;
+      padding: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+    }
+    .job-card:hover {
+      background: rgba(108,99,255,0.1);
+      border-color: #6c63ff;
+      transform: scale(1.02);
+    }
+    .job-info h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+    .badge {
+      background: #2dd4bf20;
+      color: #2dd4bf;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .result-card {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2rem;
+      width: 100%;
+      animation: pop 0.6s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .timeline-bar {
+      width: 100%;
+      background: rgba(255,255,255,0.1);
+      height: 5px;
+      border-radius: 10px;
+      margin: 1.2rem 0;
+      position: relative;
+    }
+    .timeline-progress {
+      height: 100%;
+      background: #6c63ff;
+      border-radius: 10px;
+      transition: width 0.8s ease;
+    }
+    .logo {
+      font-weight: 800;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, #6c63ff, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    h1, h2 {
+      margin-bottom: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+<div class="game-container" id="gameContainer">
+  <!-- Scene 0: Graduation -->
+  <div class="scene active" id="scene-graduation">
+    <div class="grad-cap">🎓</div>
+    <h1 style="font-size: 2.2rem; text-align: center;">Congratulations, Graduate!</h1>
+    <p style="opacity: 0.8; margin-bottom: 1rem;">Your university journey is complete.<br>Now the real game begins.</p>
+    <div class="coach-bubble">
+      "You've got the theory. Let's build a killer CV and land that first job. Ready?"
+    </div>
+    <button class="btn" onclick="goToScene('cv')">Build Your CV ➜</button>
+  </div>
+
+  <!-- Scene 1: CV Builder -->
+  <div class="scene" id="scene-cv">
+    <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 2rem;">📄</span> Create Your CV</h2>
+    <div class="cv-panel">
+      <label style="font-weight: 600;">Pick your avatar:</label>
+      <div class="avatar-selector" id="avatarSelector">
+        <div class="avatar-option selected" data-avatar="👨‍💻">👨‍💻</div>
+        <div class="avatar-option" data-avatar="👩‍💻">👩‍💻</div>
+        <div class="avatar-option" data-avatar="🧑‍💻">🧑‍💻</div>
+      </div>
+      <label style="font-weight: 600; margin-top: 0.8rem;">Your name:</label>
+      <input type="text" id="playerName" value="Alex Rivera" style="padding: 0.8rem; border-radius: 2rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1rem; outline: none; width: 70%;">
+      <label style="font-weight: 600; margin-top: 1rem;">Top Skills:</label>
+      <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+        <div class="skill-bar-container"><span class="skill-label">📊 Data Analysis</span><div class="skill-bar"><div class="skill-fill" style="width: 72%;"></div></div><span>72</span></div>
+        <div class="skill-bar-container"><span class="skill-label">🐍 Python</span><div class="skill-bar"><div class="skill-fill" style="width: 65%;"></div></div><span>65</span></div>
+        <div class="skill-bar-container"><span class="skill-label">🗣️ Communication</span><div class="skill-bar"><div class="skill-fill" style="width: 58%;"></div></div><span>58</span></div>
+        <div class="skill-bar-container"><span class="skill-label">⚙️ SQL</span><div class="skill-bar"><div class="skill-fill" style="width: 70%;"></div></div><span>70</span></div>
+      </div>
+    </div>
+    <div class="coach-bubble" style="margin-top: 1.5rem;">
+      "Solid base. These skill bars will grow as you work. Let's find a job that fits your profile."
+    </div>
+    <button class="btn" onclick="goToScene('jobboard')">Browse Jobs ➜</button>
+  </div>
+
+  <!-- Scene 2: Job Board -->
+  <div class="scene" id="scene-jobboard">
+    <h2 style="display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 2rem;">💼</span> Job Board</h2>
+    <div class="job-board" id="jobList">
+      <!-- Jobs injected by JS -->
+    </div>
+    <div class="timeline-bar"><div class="timeline-progress" id="applicationProgress" style="width: 0%;"></div></div>
+    <div id="applicationStatus" style="margin: 0.8rem 0; font-weight: 600; color: #a5b4fc;"></div>
+    <button class="btn secondary" id="finishBtn" style="display: none;" onclick="showResult()">View Application Result</button>
+  </div>
+
+  <!-- Scene 3: Result -->
+  <div class="scene" id="scene-result">
+    <div class="result-card" id="resultContent"></div>
+    <button class="btn" onclick="resetGame()">Start New Career ➜</button>
+  </div>
+</div>
+
+<script>
+  // State management
+  let currentScene = 'graduation';
+  let appliedJobs = 0;
+  const totalJobsToApply = 3;
+  let playerAvatar = '👨‍💻';
+  const jobData = [
+    { title: 'Junior Data Analyst', company: 'FinCorp', salary: '£32K', req: 'Data Analysis 60+, SQL 55+', icon: '🏦' },
+    { title: 'Associate Data Engineer', company: 'StreamLine', salary: '£38K', req: 'Python 65+, SQL 70+', icon: '⚡' },
+    { title: 'Business Intelligence Assistant', company: 'RetailMax', salary: '£30K', req: 'Data Analysis 50+, Communication 60+', icon: '🛒' },
+    { title: 'Junior ML Ops', company: 'HealthAI', salary: '£35K', req: 'Python 70+, SQL 60+', icon: '🧬' },
+    { title: 'Data Intern (Conversion)', company: 'EduBridge', salary: '£28K', req: 'Any skill 50+', icon: '📚' }
+  ];
+
+  // Scene transitions
+  function goToScene(sceneId) {
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('scene-' + sceneId);
+    if (target) {
+      target.classList.add('active');
+      currentScene = sceneId;
+      if (sceneId === 'jobboard') initJobBoard();
+      if (sceneId === 'cv') animateSkillBars();
+    }
+  }
+
+  function animateSkillBars() {
+    // Re-trigger width animation
+    document.querySelectorAll('.skill-fill').forEach(fill => {
+      const w = fill.style.width;
+      fill.style.width = '0%';
+      setTimeout(() => { fill.style.width = w; }, 100);
+    });
+  }
+
+  // Avatar selection
+  document.getElementById('avatarSelector')?.addEventListener('click', (e) => {
+    if (e.target.classList.contains('avatar-option')) {
+      document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+      e.target.classList.add('selected');
+      playerAvatar = e.target.dataset.avatar;
+    }
+  });
+
+  // Job Board logic
+  function initJobBoard() {
+    const jobList = document.getElementById('jobList');
+    jobList.innerHTML = '';
+    appliedJobs = 0;
+    document.getElementById('applicationProgress').style.width = '0%';
+    document.getElementById('applicationStatus').innerText = '';
+    document.getElementById('finishBtn').style.display = 'none';
+
+    jobData.forEach((job, idx) => {
+      const card = document.createElement('div');
+      card.className = 'job-card';
+      card.innerHTML = `
+        <div class="job-info">
+          <h3>${job.icon} ${job.title}</h3>
+          <div style="opacity:0.8;">${job.company} · ${job.salary}</div>
+          <span class="badge">${job.req}</span>
+        </div>
+        <button class="btn" style="padding:0.5rem 1.5rem; font-size:0.9rem; margin:0;" data-jobidx="${idx}">Apply</button>
+      `;
+      jobList.appendChild(card);
+    });
+
+    document.querySelectorAll('.job-card .btn').forEach(btn => {
+      btn.addEventListener('click', applyToJob);
+    });
+  }
+
+  function applyToJob(e) {
+    const idx = e.target.dataset.jobidx;
+    const job = jobData[idx];
+    // Simulate application
+    e.target.disabled = true;
+    e.target.textContent = 'Applied ✓';
+    e.target.style.background = '#2dd4bf';
+    appliedJobs++;
+    const progress = (appliedJobs / totalJobsToApply) * 100;
+    document.getElementById('applicationProgress').style.width = Math.min(progress, 100) + '%';
+    if (appliedJobs >= totalJobsToApply) {
+      document.getElementById('applicationStatus').innerText = 'All applications sent! Check your inbox.';
+      document.getElementById('finishBtn').style.display = 'inline-block';
+    } else {
+      document.getElementById('applicationStatus').innerText = `${appliedJobs}/${totalJobsToApply} applications submitted.`;
+    }
+  }
+
+  function showResult() {
+    // Randomize result: 70% chance of interview
+    const success = Math.random() < 0.7;
+    const playerName = document.getElementById('playerName')?.value || 'Alex';
+    const resultDiv = document.getElementById('resultContent');
+    const job = jobData[Math.floor(Math.random() * jobData.length)];
+    if (success) {
+      resultDiv.innerHTML = `
+        <div style="font-size:4rem;">📬</div>
+        <h2>Interview Invitation!</h2>
+        <p style="font-size:1.2rem;">${job.company} liked your profile.</p>
+        <p>You've been shortlisted for <strong>${job.title}</strong>.</p>
+        <div style="margin:1rem 0; padding:0.8rem; background:rgba(45,212,191,0.1); border-radius:1rem;">
+          <span style="color:#2dd4bf;">🗓️ Interview scheduled: Tomorrow 10:00 AM</span>
+        </div>
+        <p style="opacity:0.8;">Your career journey continues...</p>
+      `;
+    } else {
+      resultDiv.innerHTML = `
+        <div style="font-size:4rem;">📭</div>
+        <h2>No interviews this round</h2>
+        <p>But the coach has feedback.</p>
+        <div class="coach-bubble" style="margin:1rem auto;">
+          "Rejection is redirection. Boost your <strong>Communication</strong> skill and try again. The game isn't over."
+        </div>
+      `;
+    }
+    goToScene('result');
+  }
+
+  function resetGame() {
+    appliedJobs = 0;
+    document.querySelectorAll('.skill-fill').forEach(fill => {
+      fill.style.width = fill.style.width; // keep current
+    });
+    goToScene('graduation');
+    // Reset job buttons
+    document.querySelectorAll('.job-card .btn').forEach(btn => {
+      btn.disabled = false;
+      btn.textContent = 'Apply';
+      btn.style.background = 'linear-gradient(135deg, #6c63ff, #3f37c9)';
+    });
+  }
+</script>
+</body>
+</html>

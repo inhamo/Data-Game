@@ -1,0 +1,9 @@
+order_id,customer,region,product,channel,sales,status
+1001,Khumalo Foods,Gauteng,Starter Kit,Online,18400,Clean
+1002,Moyo Retail,Western Cape,Analytics Pack,Partner,27200,Clean
+1003,Dube Logistics,Gauteng,Data Refresh,Direct,9600,Duplicate Email
+1004,Ndlovu Clinics,KwaZulu-Natal,Dashboard Care,Online,14300,Missing Segment
+1005,Apex Campus,Gauteng,Analytics Pack,Direct,31800,Clean
+1006,BluePeak Stores,Eastern Cape,Starter Kit,Partner,7200,Clean
+1007,Soweto Mobile,Gauteng,Dashboard Care,Online,11900,Duplicate Email
+1008,Harbour Finance,Western Cape,Data Refresh,Direct,22400,Clean

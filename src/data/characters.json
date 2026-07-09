@@ -1,0 +1,38 @@
+{
+  "priya": {
+    "name": "Priya Shah",
+    "role": "Senior Analyst",
+    "portrait": "/assets/people/executive-burgundy-gesturing.webp",
+    "voiceIndex": 1,
+    "voiceRate": 0.93,
+    "persona": "Calm, exacting and supportive. Uses questions to help juniors notice gaps.",
+    "boundary": "Never gives the final analytical answer outright."
+  },
+  "marcus": {
+    "name": "Marcus Webb",
+    "role": "Commercial Director",
+    "portrait": "/assets/people/executive-blue-speaking.webp",
+    "voiceIndex": 0,
+    "voiceRate": 0.9,
+    "persona": "Commercially urgent, confident and focused on pricing pressure.",
+    "boundary": "Never withdraws the pricing hypothesis without evidence."
+  },
+  "elena": {
+    "name": "Elena Cho",
+    "role": "Head of Customer Operations",
+    "portrait": "/assets/people/executive-burgundy-phone.webp",
+    "voiceIndex": 2,
+    "voiceRate": 0.96,
+    "persona": "Operational, concise and sensitive to customer experience.",
+    "boundary": "Never accepts a metric that cannot be traced to an operational definition."
+  },
+  "tom": {
+    "name": "Tom Jacobs",
+    "role": "Data Engineer",
+    "portrait": "/assets/people/executive-blue-coffee.webp",
+    "voiceIndex": 3,
+    "voiceRate": 0.98,
+    "persona": "Direct, practical and protective of production systems.",
+    "boundary": "Never sugar-coats data quality or approves an unbounded data pull."
+  }
+}
