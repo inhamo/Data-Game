@@ -6,17 +6,19 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "lint" : "eslint",
+    "lint": "eslint",
     "preview": "vite preview --host 127.0.0.1",
-    "predeploy": "npm run build", 
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@vitejs/plugin-react": "^4.3.4",
     "animejs": "^4.5.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "sql.js": "^1.14.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.7"
   },

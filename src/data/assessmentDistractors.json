@@ -1,0 +1,18 @@
+{
+  "SQL": [
+    "Use ORDER BY without changing the query logic",
+    "Replace the expression with SELECT DISTINCT *",
+    "Use a CROSS JOIN and filter after aggregation",
+    "Convert every value to text before comparing it",
+    "Remove the WHERE clause and inspect the final output",
+    "Use TOP 1 without defining an ordering"
+  ],
+  "Python": [
+    "Convert the object to a string before processing it",
+    "Use a global variable instead of returning a value",
+    "Loop over every cell with iterrows()",
+    "Catch every exception and ignore it",
+    "Replace missing values with empty strings in every column",
+    "Call print() instead of assigning the result"
+  ]
+}

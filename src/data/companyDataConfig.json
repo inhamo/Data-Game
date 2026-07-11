@@ -1,0 +1,30 @@
+{
+  "regions": [
+    "Gauteng",
+    "Western Cape",
+    "KwaZulu-Natal",
+    "Eastern Cape",
+    "Free State",
+    "Limpopo"
+  ],
+  "customerStatuses": [
+    "Active",
+    "Churned",
+    "Suspended",
+    "Pending"
+  ],
+  "orderStatuses": [
+    "Completed",
+    "Returned",
+    "Pending",
+    "Cancelled"
+  ],
+  "ticketReasons": [
+    "Missing points",
+    "Delivery delay",
+    "Damaged product",
+    "Wrong item",
+    "Billing issue",
+    "Other"
+  ]
+}

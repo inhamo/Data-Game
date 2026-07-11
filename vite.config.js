@@ -156,7 +156,87 @@ Create 20 challenging, practical questions for the selected track. If the track 
   };
 }
 
+function fishAudioBridge() {
+  return {
+    name: "fish-audio-local-tts",
+    configureServer(server) {
+      server.middlewares.use("/api/fish-tts", async (request, response) => {
+        if (request.method !== "POST") {
+          response.statusCode = 405;
+          return response.end("Method not allowed");
+        }
+
+        let raw = "";
+        request.on("data", (chunk) => { raw += chunk; });
+        request.on("end", async () => {
+          try {
+            const apiKey = process.env.FISH_API_KEY;
+            if (!apiKey) throw new Error("FISH_API_KEY is missing");
+
+            const {
+              characterKey = "default",
+              text = "",
+              speed = 1,
+              volume = 0,
+            } = JSON.parse(raw || "{}");
+            const envKey = `FISH_VOICE_${String(characterKey).toUpperCase().replace(/[^A-Z0-9]/g, "_")}`;
+            const referenceId = process.env[envKey] || process.env.FISH_DEFAULT_VOICE_ID;
+            if (!referenceId) throw new Error(`${envKey} or FISH_DEFAULT_VOICE_ID is missing`);
+
+            const fishResponse = await fetch("https://api.fish.audio/v1/tts", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+                "model": process.env.FISH_MODEL || "s2.1-pro-free",
+              },
+              body: JSON.stringify({
+                text: String(text).slice(0, 1800),
+                reference_id: referenceId,
+                temperature: Number(process.env.FISH_TEMPERATURE || 0.72),
+                top_p: Number(process.env.FISH_TOP_P || 0.72),
+                prosody: {
+                  speed,
+                  volume,
+                  normalize_loudness: true,
+                },
+                chunk_length: 300,
+                normalize: true,
+                format: "mp3",
+                sample_rate: 44100,
+                mp3_bitrate: 128,
+                latency: process.env.FISH_LATENCY || "balanced",
+                max_new_tokens: 1024,
+                repetition_penalty: 1.2,
+                min_chunk_length: 50,
+                condition_on_previous_chunks: true,
+                early_stop_threshold: 1,
+              }),
+            });
+
+            if (!fishResponse.ok) {
+              const errorText = await fishResponse.text();
+              throw new Error(errorText || `Fish Audio failed with ${fishResponse.status}`);
+            }
+
+            const audio = Buffer.from(await fishResponse.arrayBuffer());
+            response.statusCode = 200;
+            response.setHeader("Content-Type", "audio/mpeg");
+            response.setHeader("Cache-Control", "no-store");
+            response.end(audio);
+          } catch (error) {
+            console.error("[fish-audio-local-tts]", error.message);
+            response.statusCode = 503;
+            response.setHeader("Content-Type", "application/json");
+            response.end(JSON.stringify({ error: error.message || "Fish Audio is unavailable" }));
+          }
+        });
+      });
+    }
+  };
+}
+
 export default defineConfig(({ command }) => ({
-  plugins: [react(), geminiBridge()],
+  plugins: [react(), geminiBridge(), fishAudioBridge()],
   base: command === "build" ? "/Data-Game/" : "/"
 }));

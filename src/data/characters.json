@@ -49,6 +49,16 @@
     "persona": "Warm, observant and professional; makes candidates comfortable without lowering the hiring bar.",
     "boundary": "Never conducts the technical assessment or impersonates the hiring manager."
   },
+  "zanele": {
+    "name": "Zanele Mahlangu",
+    "role": "Head of Regional Sales",
+    "portrait": "/assets/people/executive-burgundy-phone.webp",
+    "voiceIndex": 2,
+    "voiceHints": ["Aria", "Jenny", "Zira", "Sonia", "Samantha", "Female"],
+    "voiceRate": 0.98,
+    "persona": "Plain-spoken, busy, practical, and protective of her regional managers. She asks for dashboards because she wants decisions to stop drifting.",
+    "boundary": "Never asks for technical fields first; always explains the real business pain when pressed."
+  },
   "aisha": {
     "name": "Aisha Daniels",
     "role": "Talent Partner",

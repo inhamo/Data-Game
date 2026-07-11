@@ -1,0 +1,783 @@
+{
+  "welcomeScreens": [
+    {
+      "title": "PLATO",
+      "body": "DATA CAREER SIMULATOR"
+    },
+    {
+      "title": "YOUR FINAL YEAR",
+      "body": "One result will close a chapter. Every decision after it opens another."
+    },
+    {
+      "title": "CLASS OF 2026",
+      "body": "Your story starts now."
+    }
+  ],
+  "profileQuestions": [
+    {
+      "key": "name",
+      "question": "What should we call you?",
+      "placeholder": "Your full name"
+    },
+    {
+      "key": "university",
+      "question": "Where are you studying?",
+      "placeholder": "University name"
+    },
+    {
+      "key": "degree",
+      "question": "What degree are you completing?",
+      "placeholder": "e.g. BSc Data Science"
+    },
+    {
+      "key": "favoriteModule",
+      "question": "The module you would happily take again?",
+      "placeholder": "Favourite module"
+    },
+    {
+      "key": "worstModule",
+      "question": "And the one you survived?",
+      "placeholder": "Least favourite module"
+    }
+  ],
+  "familyChat": {
+    "opening": "Hey {{firstName}} ❤️ How are you feeling about results?",
+    "steps": [
+      {
+        "saveAs": null,
+        "reply": "I hear you ❤️ Results day can feel like a lot. When university is finished, what kind of work do you think you would like to do?"
+      },
+      {
+        "saveAs": "afterUni",
+        "reply": "{{answer}} sounds like a real direction. Is there a company you would love to work for, or are you still exploring?"
+      },
+      {
+        "saveAs": "expectedCompany",
+        "reply": "That's a good place to start. You don't need the whole future figured out today. One step at a time - I'm proud of you."
+      }
+    ],
+    "fallbackReply": "I'm listening. Results first, then we take the next step together."
+  },
+  "resultsChat": {
+    "opening": "{{firstName}}!!!",
+    "announcement": "Results are out. The portal is open 😭",
+    "replies": [
+      "Open it 😭 I'm right here.",
+      "Whatever it says, we survived this degree.",
+      "I'm nervous for you now. Check the portal!",
+      "Breathe first. Then open it."
+    ]
+  },
+  "graduationCeremony": {
+    "guests": 34,
+    "queue": 8,
+    "calledBeforePlayer": [
+      {
+        "name": "Amara Ndlovu",
+        "degree": "Bachelor of Commerce in Information Systems"
+      },
+      {
+        "name": "Daniel Mensah",
+        "degree": "Bachelor of Science in Computer Science"
+      }
+    ],
+    "awardLabel": "Degree conferred upon",
+    "callTemplate": "{{name}}, Bachelor candidate, please come forward.",
+    "guestConferralTemplate": "By the authority of the University Council, I confer upon {{name}} the degree of {{degree}}.",
+    "playerCallTemplate": "{{name}}, please come forward to receive your degree.",
+    "playerConferralTemplate": "By the authority vested in me by the University Council, I confer upon {{name}} the degree of {{degree}}.",
+    "cheerLine": "Family, friends, faculty, please join us in celebrating the graduating class.",
+    "cheerLabel": "The hall rises in applause"
+  },
+  "technicalInterviewTasks": [
+    {
+      "prompt": "Find customers who have never placed an order.",
+      "options": [
+        "SELECT c.customer_id FROM customers c LEFT JOIN orders o ON c.customer_id=o.customer_id WHERE o.order_id IS NULL;",
+        "SELECT customer_id FROM customers INNER JOIN orders USING(customer_id);"
+      ],
+      "correct": 0
+    },
+    {
+      "prompt": "Calculate total order value per customer.",
+      "options": [
+        "SELECT customer_id, SUM(order_value) FROM orders GROUP BY customer_id;",
+        "SELECT customer_id, order_value FROM orders ORDER BY order_value;"
+      ],
+      "correct": 0
+    },
+    {
+      "prompt": "Return only customers whose total order value exceeds 5,000.",
+      "options": [
+        "SELECT customer_id FROM orders WHERE SUM(order_value)>5000;",
+        "SELECT customer_id FROM orders GROUP BY customer_id HAVING SUM(order_value)>5000;"
+      ],
+      "correct": 1
+    },
+    {
+      "prompt": "The join creates duplicate customer rows. What should you inspect first?",
+      "options": [
+        "Whether orders contains many rows per customer and whether the output grain is intentional.",
+        "Whether customers is sorted alphabetically."
+      ],
+      "correct": 0
+    },
+    {
+      "prompt": "Return each customer's latest order using a window function.",
+      "options": [
+        "ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date DESC)",
+        "COUNT(*) OVER(ORDER BY customer_id)"
+      ],
+      "correct": 0
+    }
+  ],
+  "teamAssessmentGames": [
+    {
+      "title": "Priority sprint",
+      "prompt": "A loyalty outage affects 18% of customers while a dashboard typo affects the board deck. What goes first?",
+      "options": [
+        "Contain the customer-facing outage and notify stakeholders.",
+        "Fix the visible board typo before anyone notices."
+      ],
+      "correct": 0
+    },
+    {
+      "title": "Signal or noise",
+      "prompt": "Churn rises only in the migrated cohort, while overall traffic is stable. Which clue deserves the next test?",
+      "options": [
+        "The migration cohort and loyalty balance integrity.",
+        "The colour used on the acquisition campaign."
+      ],
+      "correct": 0
+    },
+    {
+      "title": "Team judgement",
+      "prompt": "Two senior colleagues disagree during the exercise. What is your strongest contribution?",
+      "options": [
+        "Restate the decision, evidence, and assumptions so the team can compare options.",
+        "Wait silently for the most senior person to decide."
+      ],
+      "correct": 0
+    },
+    {
+      "title": "Pattern check",
+      "prompt": "Complaints rise, redemption failures rise, and churn rises in the same cohort. What is the disciplined conclusion?",
+      "options": [
+        "The signals converge, but causality still needs validation.",
+        "The loyalty system is definitely the sole cause."
+      ],
+      "correct": 0
+    },
+    {
+      "title": "Decision room",
+      "prompt": "The team has ten minutes left and incomplete evidence. What should you present?",
+      "options": [
+        "A provisional recommendation with confidence, risks, and the next validation step.",
+        "A confident final answer without limitations."
+      ],
+      "correct": 0
+    }
+  ],
+  "professionalProfileTips": [
+    {
+      "title": "Photo & banner",
+      "text": "Use a clear, recent photo that looks like you. Add a banner connected to data, your city, or work you are proud of.",
+      "tag": "Photo"
+    },
+    {
+      "title": "Headline",
+      "text": "Replace \"student\" with a searchable direction: \"Graduate Data Analyst | SQL · Power BI · {{favoriteModule}}\".",
+      "tag": "Headline"
+    },
+    {
+      "title": "About",
+      "text": "Write 4-6 short lines: the problems you enjoy, the tools you use, one piece of evidence, and the role you are pursuing.",
+      "tag": "About"
+    },
+    {
+      "title": "Featured",
+      "text": "Pin your strongest dashboard, GitHub project, analysis report, or case study. Show the work instead of only naming skills.",
+      "tag": "Featured"
+    },
+    {
+      "title": "Experience",
+      "text": "Projects, volunteering, societies, tutoring, and part-time work count when you explain the skill and result honestly.",
+      "tag": "Experience"
+    },
+    {
+      "title": "Skills",
+      "text": "Put role-relevant skills first. Keep SQL, Power BI, Excel, Python, analysis, and communication aligned with the jobs you want.",
+      "tag": "Skills"
+    },
+    {
+      "title": "Education",
+      "text": "Add the degree, university, relevant modules, projects, awards, and activities. Remove school detail once it stops helping.",
+      "tag": "Education"
+    },
+    {
+      "title": "Network",
+      "text": "Connect with classmates, lecturers, alumni, recruiters, and analysts. Add a short personal note when there is a genuine connection.",
+      "tag": "Network"
+    }
+  ],
+  "academy": {
+    "pretestQuestions": [
+      {
+        "question": "A stakeholder asks for a dashboard. What should you understand first?",
+        "options": [
+          "What decision or behaviour the dashboard should change",
+          "Which colours the charts should use"
+        ],
+        "correct": 0
+      },
+      {
+        "question": "In SCQA, why do we lead with the answer once we have evidence?",
+        "options": [
+          "Because busy stakeholders need the point before the detail",
+          "Because it hides uncertainty"
+        ],
+        "correct": 0
+      }
+    ],
+    "frameworks": [
+      {
+        "title": "Problem definition",
+        "body": "Turn a vague request into a decision, user, metric, comparison, period, and next action. This tells you what belongs in the work and what does not."
+      },
+      {
+        "title": "SCQA",
+        "body": "Situation gives shared context. Complication explains what changed. Question names what must be decided. Answer states the current recommendation or hypothesis first."
+      }
+    ],
+    "resources": [
+      {
+        "title": "Read: The Minto approach",
+        "body": "Monash University - SCQA and Pyramid Principle",
+        "url": "https://www.monash.edu/student-academic-success/excel-at-writing/how-to-write/business-paper-using-the-minto-approach"
+      },
+      {
+        "title": "Watch: SCQA explained",
+        "body": "YouTube learning results",
+        "url": "https://www.youtube.com/results?search_query=SCQA+framework+Barbara+Minto"
+      }
+    ],
+    "practicePrompts": [
+      "A regional sales lead asks for a dashboard. Write the decision it should support and the five Monday metrics you would include in v1.",
+      "Turn the dashboard request into SCQA: what is the stable situation, what changed, what question must be answered, and what is your v1 answer?",
+      "Write one short stakeholder reply explaining what you deliberately left out of v1 and why it can wait."
+    ]
+  },
+  "firstBoardroomMeeting": {
+    "title": "First customer meeting",
+    "room": "Boardroom 4",
+    "time": "09:30",
+    "screenTitle": "LOYALTY DROP - MORNING READOUT",
+    "screenSubtitle": "Retention down - pricing pressure - support backlog",
+    "dialogue": [
+      {
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Morning. Give me two seconds. My laptop has decided today is the day to be dramatic.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "elena",
+        "speaker": "Elena Cho",
+        "text": "It is not just your laptop. Finance has been waiting for this loyalty answer since Friday. They are not in a poetic mood.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "marcus",
+        "speaker": "Marcus Webb",
+        "text": "Marketing is going to say it plainly. We changed prices, loyalty dipped, people are blaming us. I need to know if pricing is actually the story.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Maybe. But support tickets also jumped, reward redemptions started failing, and the app release landed in the same week. That is three possible fires, not one.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "marcus",
+        "speaker": "Marcus Webb",
+        "text": "I hear you. But leadership does not want a detective novel. They want the branch we are cutting first.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Then we define the decision. Are we reversing pricing, fixing loyalty redemption, or escalating support capacity? Different answers, different data.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "elena",
+        "speaker": "Elena Cho",
+        "text": "And before anyone builds a dashboard, I want the grain checked. Customer, account, transaction, ticket. If we mix those, the answer will look confident and still be wrong.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "marcus",
+        "speaker": "Marcus Webb",
+        "text": "Fine. So we are not pretending one chart solves it. Priya, give me the simple version before I walk into a room full of people with opinions.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Simple version: loyalty dropped. We do not yet know why. We break the possible causes into clean branches, test the timing, then recommend the first action with a confidence level.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "marcus",
+        "speaker": "Marcus Webb",
+        "text": "That I can use. Less magic, more sequence.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Exactly. And {{firstName}}, sorry, we just pulled you into the deep end on your first morning.",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "elena",
+        "speaker": "Elena Cho",
+        "text": "Fresh eyes help. If the room sounds too certain, question the certainty. What would you check before believing pricing is the answer?",
+        "pace": "quick"
+      },
+      {
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Start with the plain answer. Then support it. No performance needed.",
+        "pace": "normal"
+      }
+    ],
+    "responseOptions": [
+      {
+        "id": "simple",
+        "label": "Check whether loyalty fell only after the price change, or whether support tickets and redemption failures explain the same customers."
+      },
+      {
+        "id": "jargon",
+        "label": "Say pricing is the answer because leadership needs a quick branch to cut first."
+      },
+      {
+        "id": "unknown",
+        "label": "I do not know yet. I would define the decision, split the possible causes, then test timing and customer overlap."
+      }
+    ]
+  },
+  "postMeetingReflection": {
+    "title": "The room was loud. The work is quiet.",
+    "body": "That first meeting was meant to shake you a little. Not because you are weak. Because real offices can make simple things sound impossible. People rush. People use names for things before they explain the thing. People sound certain when they are actually under pressure.",
+    "principle": "Do not become harsh just because you finally get paid. Give people grace. Do the work cleanly. Ask the honest question. Leave the room clearer than you found it.",
+    "courseNote": "This is why the course begins with business thinking. Tools matter, but tools are only hands. The mind has to learn the shape of the problem first: what decision is being made, what could explain the signal, and what evidence would change the next action.",
+    "reading": {
+      "title": "Optional workplace story: a first analyst role can feel messy",
+      "summary": "A Reddit r/SQL poster described dashboards being ignored, lost motivation, and uncertainty about whether the problem was data analysis itself or the workplace around them. The lesson is not to panic: weak direction can distort how your own skill feels.",
+      "url": "https://www.reddit.com/r/SQL/comments/1cgudy1/i_really_messed_up_on_my_first_data_analyst_job/"
+    }
+  },
+  "dashboardScopingMeeting": {
+    "title": "What's actually on the dashboard",
+    "room": "Voice call",
+    "time": "16:12",
+    "screenTitle": "SALES DASHBOARD REQUEST",
+    "screenSubtitle": "Regional sales - one trusted Monday view - v1 scope",
+    "intro": {
+      "overline": "Second meeting",
+      "title": "What's actually on the dashboard?",
+      "subtitle": "It starts in Slack. Then a ten minute call turns one vague dashboard request into a real business question."
+    },
+    "dialogue": [
+      {
+        "mode": "slack",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "time": "4:12 PM",
+        "text": "Hey any chance we could get a sales dashboard built? Nothing fancy just something regional managers can pull up.",
+        "spoken": false,
+        "emotion": "neutral"
+      },
+      {
+        "mode": "slack",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "time": "4:14 PM",
+        "text": "Sure. Quick call first?",
+        "spoken": false,
+        "emotion": "neutral"
+      },
+      {
+        "mode": "slack",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "time": "4:14 PM",
+        "text": "Now?",
+        "spoken": false,
+        "emotion": "surprised"
+      },
+      {
+        "mode": "slack",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "time": "4:15 PM",
+        "text": "If you've got ten minutes.",
+        "spoken": false,
+        "emotion": "neutral"
+      },
+      {
+        "mode": "stage",
+        "speakerKey": "system",
+        "speaker": "Call connects",
+        "text": "Background noise on Zanele's end. Open-plan office. A door closes.",
+        "spoken": false,
+        "emotion": "neutral"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Hi sorry one sec. Okay I'm in a room now. Can you hear me?",
+        "spokenText": "Hi sorry one sec okay I'm in a room now can you hear me?",
+        "pace": "quick",
+        "emotion": "rushed"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Yep. So. Dashboard.",
+        "spokenText": "Yep so dashboard",
+        "pace": "normal",
+        "emotion": "dry"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Right yeah. Regional managers keep asking me for numbers and I keep pulling them by hand and I'm tired of it.",
+        "spokenText": "Right yeah regional managers keep asking me for numbers and I keep pulling them by hand and I'm tired of it",
+        "pace": "quick",
+        "emotion": "tired"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Before I hand this to someone to build what's it actually for? Like the Monday morning you have this thing versus the Monday morning you don't. What's different?",
+        "spokenText": "Before I hand this to someone to build what's it actually for like the Monday morning you have this thing versus the Monday morning you don't what's different?",
+        "pace": "normal",
+        "emotion": "curious"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Different how?",
+        "spokenText": "Different how?",
+        "pace": "quick",
+        "emotion": "uncertain"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "What do you do with it. What decision changes.",
+        "spokenText": "What do you do with it what decision changes",
+        "pace": "normal",
+        "emotion": "focused"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Honestly right now I get five spreadsheets from five regional leads and half of them don't match. Someone says they hit target, someone else's numbers say they didn't, and I end up in a whole thing trying to figure out whose file is wrong. I just want one place that's right.",
+        "spokenText": "Honestly right now I get five spreadsheets from five regional leads and half of them don't match someone says they hit target someone else's numbers say they didn't and I end up in a whole thing trying to figure out whose file is wrong I just want one place that's right",
+        "pace": "quick",
+        "emotion": "frustrated"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Okay. So this isn't tell me a story. This is stop lying to me by accident.",
+        "spokenText": "Okay so this isn't tell me a story this is stop lying to me by accident",
+        "pace": "normal",
+        "emotion": "dry"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Yeah. That's yeah exactly that.",
+        "spokenText": "Yeah that's yeah exactly that",
+        "pace": "quick",
+        "emotion": "laughing"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "That's useful. Changes what we build. You don't need trend lines and forecasting. You need one number nobody can argue with.",
+        "spokenText": "That's useful changes what we build you don't need trend lines and forecasting you need one number nobody can argue with",
+        "pace": "normal",
+        "emotion": "focused"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Can it also just look decent? I do have to show it to Marcus eventually.",
+        "spokenText": "Can it also just look decent I do have to show it to Marcus eventually",
+        "pace": "quick",
+        "emotion": "half-joking"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "It'll look fine. Function first though.",
+        "spokenText": "It'll look fine function first though",
+        "pace": "normal",
+        "emotion": "dry"
+      },
+      {
+        "mode": "stage",
+        "speakerKey": "system",
+        "speaker": "Short pause",
+        "text": "Typing sounds. Priya is thinking on the call rather than filling the silence.",
+        "spoken": false,
+        "emotion": "neutral"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Okay thinking out loud for a second. Profit's the thing everyone upstairs actually cares about and profit's revenue minus cost. But nobody on your team touches revenue or cost directly day to day. What they touch is sales. So sales is probably the spine of this.",
+        "spokenText": "Okay thinking out loud for a second profit's the thing everyone upstairs actually cares about and profit's revenue minus cost but nobody on your team touches revenue or cost directly day to day what they touch is sales so sales is probably the spine of this",
+        "pace": "normal",
+        "emotion": "thinking"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Sure.",
+        "spokenText": "Sure",
+        "pace": "quick",
+        "emotion": "neutral"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "And sales doesn't happen without two things existing at the same time. Something to sell. Someone to buy it. So products and customers are going to be the two legs this stands on whatever else ends up on there.",
+        "spokenText": "And sales doesn't happen without two things existing at the same time something to sell someone to buy it so products and customers are going to be the two legs this stands on whatever else ends up on there",
+        "pace": "normal",
+        "emotion": "teaching"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Feels obvious when you say it like that.",
+        "spokenText": "Feels obvious when you say it like that",
+        "pace": "quick",
+        "emotion": "softened"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "It's always obvious after. There's an old story. Some guy in the twenties got women smoking in public by staging a fake protest on Fifth Avenue. Cigarettes as this whole torch of freedom thing. Wasn't really about the cigarettes. The product already existed. The customers didn't. Not for that market. Not yet. He had to build the customer side before the product side mattered at all.",
+        "spokenText": "It's always obvious after there's an old story some guy in the twenties got women smoking in public by staging a fake protest on Fifth Avenue cigarettes as this whole torch of freedom thing wasn't really about the cigarettes the product already existed the customers didn't not for that market not yet he had to build the customer side before the product side mattered at all",
+        "pace": "normal",
+        "emotion": "story"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Where's this going.",
+        "spokenText": "Where's this going",
+        "pace": "quick",
+        "emotion": "skeptical"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Nowhere it's just. No point building a beautiful products view if we can't see who's actually buying. Same idea. Way lower stakes.",
+        "spokenText": "Nowhere it's just no point building a beautiful products view if we can't see who's actually buying same idea way lower stakes",
+        "pace": "normal",
+        "emotion": "dry"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Noted. Don't stage a fake protest.",
+        "spokenText": "Noted don't stage a fake protest",
+        "pace": "quick",
+        "emotion": "laughing"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Save it for Q4.",
+        "spokenText": "Save it for Q4",
+        "pace": "quick",
+        "emotion": "dry"
+      },
+      {
+        "mode": "stage",
+        "speakerKey": "system",
+        "speaker": "Beat",
+        "text": "The call settles. Priya has enough to frame the first version.",
+        "spoken": false,
+        "emotion": "neutral"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Okay. So. Customer count, customer value, probably some kind of segmentation underneath that. What else is going on it. You've been quiet this whole time.",
+        "spokenText": "Okay so customer count customer value probably some kind of segmentation underneath that what else is going on it you've been quiet this whole time",
+        "pace": "normal",
+        "emotion": "inviting"
+      }
+    ],
+    "playerCue": {
+      "metricPrompt": "Add one metric to the dashboard.",
+      "reasonPrompt": "Now say why it helps on Monday morning.",
+      "defaultMetric": "Average order value",
+      "defaultReason": "Because if sales go up you want to know if it's more customers or bigger baskets. Different problem either way.",
+      "systemLabel": "Player typed input, read back by the system"
+    },
+    "afterPlayerDialogue": [
+      {
+        "mode": "system-readback",
+        "speakerKey": "system",
+        "speaker": "You",
+        "text": "{{playerMetric}}",
+        "spokenText": "{{playerMetric}}",
+        "pace": "normal",
+        "emotion": "neutral"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Why.",
+        "spokenText": "Why",
+        "pace": "quick",
+        "emotion": "testing"
+      },
+      {
+        "mode": "system-readback",
+        "speakerKey": "system",
+        "speaker": "You",
+        "text": "{{playerReason}}",
+        "spokenText": "{{playerReason}}",
+        "pace": "normal",
+        "emotion": "neutral"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Good. Put it on.",
+        "spokenText": "Good put it on",
+        "pace": "quick",
+        "emotion": "approving"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Can we also just put everything on it? I feel like more data is safer.",
+        "spokenText": "Can we also just put everything on it I feel like more data is safer",
+        "pace": "quick",
+        "emotion": "uncertain"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "That's not a dashboard. That's a database with extra steps. Pick five things you'll actually look at every Monday, we build those properly, we can always add a second tab later.",
+        "spokenText": "That's not a dashboard that's a database with extra steps pick five things you'll actually look at every Monday we build those properly we can always add a second tab later",
+        "pace": "normal",
+        "emotion": "dry"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Fine fine. Five things.",
+        "spokenText": "Fine fine five things",
+        "pace": "quick",
+        "emotion": "amused"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "I'll have something in two days. It won't be perfect. It'll be right enough to show you and wrong in a useful way if it's wrong, and we fix it from there.",
+        "spokenText": "I'll have something in two days it won't be perfect it'll be right enough to show you and wrong in a useful way if it's wrong and we fix it from there",
+        "pace": "normal",
+        "emotion": "steady"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "This is already more thinking than I expected for just a dashboard.",
+        "spokenText": "This is already more thinking than I expected for just a dashboard",
+        "pace": "normal",
+        "emotion": "honest"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "That's the job. Talk Thursday?",
+        "spokenText": "That's the job talk Thursday?",
+        "pace": "quick",
+        "emotion": "dry"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "zanele",
+        "speaker": "Zanele Mahlangu",
+        "text": "Thursday works. Thanks Priya.",
+        "spokenText": "Thursday works thanks Priya",
+        "pace": "quick",
+        "emotion": "relieved"
+      },
+      {
+        "mode": "stage",
+        "speakerKey": "system",
+        "speaker": "Call ends",
+        "text": "Zanele drops. Priya stays in the workspace, still typing.",
+        "spoken": false,
+        "emotion": "neutral"
+      },
+      {
+        "mode": "call",
+        "speakerKey": "priya",
+        "speaker": "Priya Shah",
+        "text": "Write that down somewhere if you want. The story, not the dashboard. You'll want it again.",
+        "spokenText": "Write that down somewhere if you want the story not the dashboard you'll want it again",
+        "pace": "normal",
+        "emotion": "soft"
+      }
+    ],
+    "pinnedNote": {
+      "title": "Priya's cigarette story",
+      "body": "Products and customers are both part of sales. No point tracking products beautifully if you cannot see who is actually buying."
+    }
+  }
+}
